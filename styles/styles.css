@@ -1,0 +1,48 @@
+/*SECTION----------------------------------------> IMPORTS */
+@import url(_components.css);
+@import url(_custom.css);
+@import url(_reset.css);
+@import url(_utilities.css);
+
+.header {
+  background-color: aqua;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stop__search {
+  background-color: pink;
+}
+
+.main {
+  padding: 0.5rem;
+}
+
+.stop-card {
+  background-color: orangered;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.stop-card__info {
+  background-color: yellow;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem;
+}
+
+.stop-card__lines {
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.stop-card__line {
+  background-color: lightgreen;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem;
+}
