@@ -1,36 +1,53 @@
+// SECTION - Imports --------------------------------------------------------------------------------------
 import { LOGINURL } from './helper.js';
 import { XCLIENDID } from './helper.js';
 import { PASSKEY } from './helper.js';
 import { AJAX } from './helper.js';
 
+// SECTION - Auxiliary data--------------------------------------------------------------------------------
 const renderLogs = false;
+const accessTokenProv = 'd6b8ea66-3744-11ed-8fab-02dc46503f61';
 
-// const accessTokenProv = 'd6b8ea66-3744-11ed-8fab-02dc46503f61';
+// SECTION - Model State ----------------------------------------------------------------------------------
+export const state = {
+  accessToken: '',
+  user: {},
+  busArrivals: {
+    stopQuery: '',
+    stopInfo: {},
+    arrivals: [],
+    incidents: {},
+  },
+};
 
 //SECTION - API Calls---------------------------------------------------------------------------------------
 const loginHeader = {
+  //TODO mejorar esto
   headers: {
     'X-ClientID': XCLIENDID,
     passKey: PASSKEY,
   },
 };
 // login API server and get access token
-const getAccessToken = async function () {
+export const getAccessToken = async function () {
+  //TODO separar el login del access token, tal vez
   renderLogs && console.log('Getting access token...');
   const data = await fetch(LOGINURL, loginHeader);
   const res = await data.json();
   renderLogs && console.log('Response from access token call: ', res);
   renderLogs && console.log('Access token: ', res.data[0].accessToken);
+  state.accessToken = res.data[0].accessToken;
   return res.data[0].accessToken;
 };
 
 // Gets detailed information about a particular stop
 export const stopRqst = async function (stop) {
+  //TODO Sacar data de api fuera de la llamada
   const fetchData = {
     method: 'GET',
     url: `https://openapi.emtmadrid.es/v2/transport/busemtmad/stops/${stop}/detail/`,
     header: {
-      accessToken: await getAccessToken(),
+      accessToken: state.accessToken,
       // accessToken: accessTokenProv,
       'Content-Type': 'application/json',
     },
@@ -46,16 +63,15 @@ export const stopRadiusRqst = async function (stop, radius) {
     method: 'GET',
     url: `https://openapi.emtmadrid.es/v2/transport/busemtmad/stops/arroundstop/${stop}/${radius}/`,
     header: {
-      accessToken: await getAccessToken(),
+      accessToken: state.accessToken,
       'Content-Type': 'application/json',
     },
     description: 'Stop at radius',
   };
-  return await AJAX(fetchData);
+  return fetchData;
 };
 
-// Gives arrival time of buses on a given stop
-export const busTimeArrival = async function (stop) {
+const busArrivalsApi = function (stop) {
   const data = JSON.stringify({
     DateTime_Referenced_Incidencies_YYYYMMDD: '20190923',
     Text_EstimationsRequired_YN: 'Y',
@@ -68,24 +84,35 @@ export const busTimeArrival = async function (stop) {
     method: 'POST',
     url: `https://openapi.emtmadrid.es/v2/transport/busemtmad/stops/${stop}/arrives/`, ///${data.line}/`,
     header: {
-      accessToken: await getAccessToken(),
+      accessToken: state.accessToken,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: data,
     description: 'Bus time arrival',
   };
-  renderLogs && console.table(await AJAX(fetchData));
-  return await AJAX(fetchData);
+  return fetchData;
+};
+
+// Gives arrival time of buses on a given stop
+export const busTimeArrival = async function (stop) {
+  state.busArrivals.stopQuery = stop;
+  const response = await AJAX(busArrivalsApi(stop));
+  console.log('response: ', response);
+  state.busArrivals.stopInfo = response.StopInfo[0];
+  state.busArrivals.arrivals = response.Arrive;
+  console.log('state arrivals: ', state.busArrivals.arrivals);
+  return await AJAX(busArrivalsApi(stop));
 };
 
 // Gives de route line of a given bus
 export const lineRoute = async function (line) {
+  //TODO Sacar data de api fuera de la llamada
   const fetchData = {
     method: 'GET',
     url: `https://openapi.emtmadrid.es/v1/transport/busemtmad/lines/${line}/route/`,
     header: {
-      accessToken: await getAccessToken(),
+      accessToken: state.accessToken,
       'Content-Type': 'application/json',
     },
     description: 'Bus route line',

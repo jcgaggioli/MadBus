@@ -1,6 +1,7 @@
 import View from './Views.js';
+import { capitalizeWords } from '../helper.js';
 
-class stopCardView extends View {
+class StopCardView extends View {
   _parentElement = document.querySelector('.stop-card__container');
 
   addHandlerSearch(handler) {
@@ -15,26 +16,29 @@ class stopCardView extends View {
     const markup = `
     <div class="stop-card__info">
       <div class="stop-card__name">
-        <h2>${this._data.StopInfo[0].stopName.toUpperCase()}</h2>
-        <h4>${this._data.StopInfo[0].Direction}</h4>
+        <h2>${this._data.stopInfo.stopName.toUpperCase()}</h2>
+        <h4>${this._data.stopInfo.Direction}</h4>
       </div>
-      <div class="stop-card__stop-number">${this._data.StopInfo[0].stopId}</div>
+      <div class="stop-card__stop-number">${this._data.stopInfo.stopId}</div>
       </div>
       <div class="stop-card__lines">
-    ${this._data.Arrive.map(
-      bus => `      
+    ${this._data.arrivals
+      .map(
+        bus => `      
     <div class="stop-card__line">
     <div class="line__label">${bus.line}</div>
-    <div class="line__heading">${bus.destination}</div>
-    <div class="line__min-frq">${bus.estimateArrive}</div>
-    <div class="line__max-freq">35</div>
+    <div class="line__heading">A ${capitalizeWords(bus.destination)}</div>
+    <div class="line__eta"><strong>${Math.trunc(
+      bus.estimateArrive / 60
+    )}</strong> min</div>
     </div>
   `
-    ).join('')}
+      )
+      .join('')}
     </div>
     `;
     return markup;
   }
 }
 
-export default new stopCardView();
+export default new StopCardView();

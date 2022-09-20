@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" defer src="js/controller.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles\styles.css" />
     <title>test</title>
   </head>
@@ -27,14 +30,13 @@
       </section>   
     </header>
 
-
     <section id="stop" class="container">
-      <div class="stop__search">
-        <input type="text" class="stop__input" placeholder="Nombre o número de parada" required="">
-      </div>
-      <h1>PRUEBA</h1>
+      <form class="stop__search">
+        <input type="text" class="stop__input" placeholder="Nombre o número de parada">
+        <button class="btn search__btn"><span>BUSCAR</span></button>
+      </form>
       <div class="stop-card__container">
-        <div class="stop-card__info">
+        <!-- <div class="stop-card__info">
           <div class="stop-card__name">
             <h2>ESQUERDO GOYA</h2>
             <h4>Doctor esquerdo Goya, 54</h4>
@@ -66,7 +68,7 @@
             <div class="line__min-frq">12</div>
             <div class="line__max-freq">35</div>
           </div>
-        </div>
+        </div> -->
       </div>
     </secti>
   </body>

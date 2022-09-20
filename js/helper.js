@@ -49,3 +49,14 @@ export const AJAX = async function (rqstData) {
     throw error;
   }
 };
+
+export const capitalizeWords = function (str) {
+  const arr = str.split(' ');
+  return arr
+    .map(element => {
+      return element.charAt(0).toUpperCase() + element.slice(1).toLowerCase();
+    })
+    .join(' ');
+};
+
+

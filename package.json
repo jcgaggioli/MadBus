@@ -1,0 +1,15 @@
+{
+  "name": "madbus",
+  "version": "1.0.0",
+  "description": "Madrid bus information",
+  "default": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "author": "Juan Cruz Gaggioli",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.7.0"
+  }
+}
