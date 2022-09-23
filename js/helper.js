@@ -59,4 +59,116 @@ export const capitalizeWords = function (str) {
     .join(' ');
 };
 
+const testArr = [
+  {
+    line: '150',
+    stop: '125',
+    isHead: 'False',
+    destination: 'SOL SEVILLA',
+    deviation: 0,
+    bus: 2554,
+    geometry: {
+      type: 'Point',
+      coordinates: [-3.6687874655861776, 40.477408505067125],
+    },
+    estimateArrive: 278,
+    DistanceBus: 1029,
+    positionTypeBus: '0',
+  },
+  {
+    line: '174',
+    stop: '125',
+    isHead: 'False',
+    destination: 'PLAZA CASTILLA',
+    deviation: 0,
+    bus: 2073,
+    geometry: {
+      type: 'Point',
+      coordinates: [-3.6686261415820987, 40.49338164140787],
+    },
+    estimateArrive: 353,
+    DistanceBus: 2238,
+    positionTypeBus: '0',
+  },
+  {
+    line: '129',
+    stop: '125',
+    isHead: 'False',
+    destination: 'PLAZA CASTILLA',
+    deviation: 0,
+    bus: 2137,
+    geometry: {
+      type: 'Point',
+      coordinates: [-3.6625002409353433, 40.482256567689696],
+    },
+    estimateArrive: 401,
+    DistanceBus: 1977,
+    positionTypeBus: '0',
+  },
+  {
+    line: '129',
+    stop: '125',
+    isHead: 'False',
+    destination: 'PLAZA CASTILLA',
+    deviation: 0,
+    bus: 2139,
+    geometry: {
+      type: 'Point',
+      coordinates: [-3.6570251770763487, 40.48074695157227],
+    },
+    estimateArrive: 827,
+    DistanceBus: 4124,
+    positionTypeBus: '0',
+  },
+  {
+    line: '174',
+    stop: '125',
+    isHead: 'False',
+    destination: 'PLAZA CASTILLA',
+    deviation: 0,
+    bus: 2077,
+    geometry: {
+      type: 'Point',
+      coordinates: [-3.6466132695767404, 40.485902073673344],
+    },
+    estimateArrive: 987,
+    DistanceBus: 5292,
+    positionTypeBus: '0',
+  },
+  {
+    line: '150',
+    stop: '125',
+    isHead: 'False',
+    destination: 'SOL SEVILLA',
+    deviation: 0,
+    bus: 2552,
+    geometry: {
+      type: 'Point',
+      coordinates: [-3.6650473983997025, 40.48791306863569],
+    },
+    estimateArrive: 1134,
+    DistanceBus: 3590,
+    positionTypeBus: '0',
+  },
+];
 
+console.log('Unmerged array: ', testArr);
+
+/*
+arrivals: [
+  {
+    line: '150',
+    destination: 'Virgen Cortijo',
+    lineArrivals: [
+      {
+        busNumber: 550,
+        busEta: 50,
+        busDeviation: 25,
+        busDistance: 50,
+        busCoords: [],
+      },
+    ],
+  },
+],
+
+*/

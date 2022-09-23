@@ -1,6 +1,6 @@
 html {
   box-sizing: border-box;
-  font-family: var(--font);
+  font-family: $font-family;
   font-size: 16px;
   scroll-behavior: smooth;
 }
@@ -14,12 +14,12 @@ html {
 body {
   margin: 0;
   overflow-x: hidden;
-  color: var(--text-color);
+  color: $text-color;
 }
 
 a {
-  color: var(--link-color);
-  transition: all 0.5s ease-out;
+  color: $link-color;
+  transition: all 0.25s ease-out;
   text-decoration: none;
 }
 

@@ -15,9 +15,60 @@ export const state = {
   busArrivals: {
     stopQuery: '',
     stopInfo: {},
-    arrivals: [],
+    arrivals: [
+      {
+        line: '150',
+        destination: 'Virgen Cortijo',
+        lineArrivals: [
+          {
+            busNumber: 550,
+            busEta: 50,
+            busDeviation: 25,
+            busDistance: 50,
+            busCoords: [],
+          },
+        ],
+      },
+    ],
     incidents: {},
   },
+};
+
+//SECTION - Data transformation
+const mergeLines = function (arr) {
+  const res = [];
+  arr.map(arrive =>
+    res.some(
+      el => (el.line === arrive.line) & (el.destination === arrive.destination)
+    )
+      ? res[
+          res.findIndex(
+            el =>
+              (el.line === arrive.line) &
+              (el.destination === arrive.destination)
+          )
+        ].lineArrivals.push({
+          busNumber: arrive.bus,
+          busEta: arrive.estimateArrive,
+          busDeviation: arrive.deviation,
+          busDistance: arrive.DistanceBus,
+          busCoords: arrive.geometry.coordinates,
+        })
+      : res.push({
+          line: arrive.line,
+          destination: arrive.destination,
+          lineArrivals: [
+            {
+              busNumber: arrive.bus,
+              busEta: arrive.estimateArrive,
+              busDeviation: arrive.deviation,
+              busDistance: arrive.DistanceBus,
+              busCoords: arrive.geometry.coordinates,
+            },
+          ],
+        })
+  );
+  return res;
 };
 
 //SECTION - API Calls---------------------------------------------------------------------------------------
@@ -100,7 +151,7 @@ export const busTimeArrival = async function (stop) {
   const response = await AJAX(busArrivalsApi(stop));
   console.log('response: ', response);
   state.busArrivals.stopInfo = response.StopInfo[0];
-  state.busArrivals.arrivals = response.Arrive;
+  state.busArrivals.arrivals = mergeLines(response.Arrive);
   console.log('state arrivals: ', state.busArrivals.arrivals);
   return await AJAX(busArrivalsApi(stop));
 };

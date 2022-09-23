@@ -1,0 +1,46 @@
+@import 'custom';
+
+/*SECTION----------------------------------------> MENU */
+.menu {
+  position: fixed;
+  left: 0;
+  top: $header-height;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+  background-color: $second-color;
+}
+
+.menu.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu a {
+  padding: $header-height/6;
+  font-size: $header-height/2;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: $first-color;
+}
+
+.menu a:hover {
+  color: $white-color;
+  background-color: $first-color;
+}
+
+.menu-btn {
+  outline: thin solid $first-color;
+  border: 0;
+  cursor: pointer;
+  background-color: $first-color;
+}
+
+.menu-btn svg {
+  fill: $text-light-color;
+  padding: 0.25rem;
+}

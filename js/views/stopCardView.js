@@ -12,7 +12,7 @@ class StopCardView extends View {
   }
 
   _generateMarkup() {
-    console.log(this._data);
+    console.log('Data to render: ', this._data);
     const markup = `
     <div class="stop-card__info">
       <div class="stop-card__name">
@@ -26,11 +26,23 @@ class StopCardView extends View {
       .map(
         bus => `      
     <div class="stop-card__line">
-    <div class="line__label">${bus.line}</div>
-    <div class="line__heading">A ${capitalizeWords(bus.destination)}</div>
-    <div class="line__eta"><strong>${Math.trunc(
-      bus.estimateArrive / 60
-    )}</strong> min</div>
+      <div class="line__label">
+      ${bus.line}
+      </div>
+      <div class="line__buses"> 
+        <div class="line__etas">${bus.lineArrivals
+          .map(
+            busArrive =>
+              `<div>
+              <strong>${Math.trunc(busArrive.busEta / 60)}</strong> min
+            </div>`
+          )
+          .join('')}
+        </div>
+        <div class="line__heading">
+        A ${capitalizeWords(bus.destination)}
+        </div>
+      </div>
     </div>
   `
       )

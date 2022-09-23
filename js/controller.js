@@ -1,6 +1,7 @@
 import * as model from './model.js';
 import stopCardView from './views/stopCardView.js';
 import searchStopView from './views/searchStopView.js';
+import menuView from './views/menuView.js';
 
 //> https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-arrives
 
