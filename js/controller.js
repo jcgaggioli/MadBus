@@ -17,7 +17,7 @@ const controlSearchResult = async function () {
     if (!query) return;
 
     //2. Load search results
-    await model.busTimeArrival(query);
+    await model.getBusArrivals(query);
 
     //3. Render results
     stopCardView.render(model.state.busArrivals);
@@ -36,11 +36,6 @@ const main = async function () {
   searchStopView.addHandlerSearch(controlSearchResult);
 
   console.log('Access Token from login: ', model.state.accessToken);
-  console.log('State arrivals: ', state.busArrivals);
-
-  // getRequest(stopRqst, { stop: '100' });
-  // getRequest(stopRadiusRqst, { stop: "148", radius: "1000" });
-  // getRequest(lineRoute, { line: "685" });
 };
 
 main();

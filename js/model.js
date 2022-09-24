@@ -1,5 +1,5 @@
 // SECTION - Imports --------------------------------------------------------------------------------------
-import { LOGINURL } from './helper.js';
+import { APIURL, LOGINURL } from './helper.js';
 import { XCLIENDID } from './helper.js';
 import { PASSKEY } from './helper.js';
 import { AJAX } from './helper.js';
@@ -71,17 +71,15 @@ const mergeLines = function (arr) {
   return res;
 };
 
-//SECTION - API Calls---------------------------------------------------------------------------------------
-const loginHeader = {
-  //TODO mejorar esto
-  headers: {
-    'X-ClientID': XCLIENDID,
-    passKey: PASSKEY,
-  },
-};
+//SECTION - API Data ---------------------------------------------------------------------------------------
 // login API server and get access token
 export const getAccessToken = async function () {
-  //TODO separar el login del access token, tal vez
+  const loginHeader = {
+    headers: {
+      'X-ClientID': XCLIENDID,
+      passKey: PASSKEY,
+    },
+  };
   renderLogs && console.log('Getting access token...');
   const data = await fetch(LOGINURL, loginHeader);
   const res = await data.json();
@@ -91,39 +89,9 @@ export const getAccessToken = async function () {
   return res.data[0].accessToken;
 };
 
-// Gets detailed information about a particular stop
-export const stopRqst = async function (stop) {
-  //TODO Sacar data de api fuera de la llamada
-  const fetchData = {
-    method: 'GET',
-    url: `https://openapi.emtmadrid.es/v2/transport/busemtmad/stops/${stop}/detail/`,
-    header: {
-      accessToken: state.accessToken,
-      // accessToken: accessTokenProv,
-      'Content-Type': 'application/json',
-    },
-    description: 'Stop details',
-  };
-  renderLogs && console.table(await AJAX(fetchData));
-  return await AJAX(fetchData);
-};
-
-// Gets the bus stops in a given radius, in meters
-export const stopRadiusRqst = async function (stop, radius) {
-  const fetchData = {
-    method: 'GET',
-    url: `https://openapi.emtmadrid.es/v2/transport/busemtmad/stops/arroundstop/${stop}/${radius}/`,
-    header: {
-      accessToken: state.accessToken,
-      'Content-Type': 'application/json',
-    },
-    description: 'Stop at radius',
-  };
-  return fetchData;
-};
-
-const busArrivalsApi = function (stop) {
+const dataAPI = function (met, urlEnd, desc) {
   const data = JSON.stringify({
+    //TODO - Chequear que hace esta data
     DateTime_Referenced_Incidencies_YYYYMMDD: '20190923',
     Text_EstimationsRequired_YN: 'Y',
     Text_IncidencesRequired_YN: 'Y',
@@ -132,73 +100,65 @@ const busArrivalsApi = function (stop) {
     statistics: 'N',
   });
   const fetchData = {
-    method: 'POST',
-    url: `https://openapi.emtmadrid.es/v2/transport/busemtmad/stops/${stop}/arrives/`, ///${data.line}/`,
+    method: met,
+    url: APIURL + urlEnd,
     header: {
       accessToken: state.accessToken,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: data,
-    description: 'Bus time arrival',
+    ...(met != 'GET' && { body: data }),
+    description: desc,
   };
   return fetchData;
 };
 
 // Gives arrival time of buses on a given stop
-export const busTimeArrival = async function (stop) {
+const busArrivalsAPI = function (stop) {
+  const urlEnd = `stops/${stop}/arrives/`;
+  const data = dataAPI('POST', urlEnd, 'Bus time arrival');
+  return data;
+};
+
+// Gets detailed information about a particular stop
+const stopInfoAPI = function (stop) {
+  const urlEnd = `stops/${stop}/detail/`;
+  const data = dataAPI('GET', urlEnd, 'Stop details');
+  return data;
+};
+
+// Gets the bus stops in a given radius, in meters
+const stopRadiusAPI = function (stop, radius) {
+  const urlEnd = `stops/arroundstop/${stop}/${radius}/`;
+  const data = dataAPI('GET', urlEnd, 'Stops at radius');
+  return data;
+};
+
+// Gives de route line of a given bus
+const lineRouteAPI = function (line) {
+  const urlEnd = `lines/${line}/route/`;
+  const data = dataAPI('GET', urlEnd, 'Bus route line');
+  return data;
+};
+
+//SECTION - API Calls ---------------------------------------------------------------------------------------
+export const getStopInfo = async function (stop) {
+  return await AJAX(stopInfoAPI(stop));
+};
+
+export const stopRadius = async function (stop, radius) {
+  return await AJAX(stopRadiusAPI(stop, radius));
+};
+
+export const getBusArrivals = async function (stop) {
   state.busArrivals.stopQuery = stop;
-  const response = await AJAX(busArrivalsApi(stop));
+  const response = await AJAX(busArrivalsAPI(stop));
   console.log('response: ', response);
   state.busArrivals.stopInfo = response.StopInfo[0];
   state.busArrivals.arrivals = mergeLines(response.Arrive);
   console.log('state arrivals: ', state.busArrivals.arrivals);
-  return await AJAX(busArrivalsApi(stop));
 };
 
-// Gives de route line of a given bus
-export const lineRoute = async function (line) {
-  //TODO Sacar data de api fuera de la llamada
-  const fetchData = {
-    method: 'GET',
-    url: `https://openapi.emtmadrid.es/v1/transport/busemtmad/lines/${line}/route/`,
-    header: {
-      accessToken: state.accessToken,
-      'Content-Type': 'application/json',
-    },
-    description: 'Bus route line',
-  };
-  return await AJAX(fetchData);
+export const getLineRoute = async function (line) {
+  return await AJAX(lineRouteAPI(line));
 };
-
-/* LPM esto sirve, pero ya no es necesario. Es la llamada a la misma api pero usamo XHR 
-const request = new XMLHttpRequest();
-request.open(
-  'POST',
-  'https://openapi.emtmadrid.es/v2/transport/busemtmad/stops/148/arrives/',
-  true
-);
-request.setRequestHeader(
-  'accesstoken',
-  'd6b8ea66-3744-11ed-8fab-02dc46503f61',
-  'Accept',
-  'application/json',
-  'Content-Type',
-  'application/json'
-);
-request;
-request.send(
-  JSON.stringify({
-    DateTime_Referenced_Incidencies_YYYYMMDD: '20190923',
-    Text_EstimationsRequired_YN: 'Y',
-    Text_IncidencesRequired_YN: 'Y',
-    Text_StopRequired_YN: 'Y',
-    cultureInfo: 'EN',
-    statistics: 'N',
-  })
-);
-request.addEventListener('load', function () {
-  console.log(JSON.parse(this.responseText));
-});
-
-*/
