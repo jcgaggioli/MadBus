@@ -43,8 +43,7 @@
 
 .line__label {
   font-weight: 700;
-
-  color: $first-color;
+  color: var(--line-color);
 }
 
 .line__heading {
@@ -102,16 +101,18 @@
 .stop__search {
   padding: 0.5rem;
   padding-bottom: 1.25rem;
-  background-color: $white-alpha-color;
-
+  color: $text-color;
+  background-color: $first-alpha-color;
   input {
     @include box-shadow-1;
     margin-top: 0.5rem;
     width: 100%;
     border-radius: 0.25rem;
     border: thin solid $gray-light-color;
+    height: 2rem;
     font-size: 1rem;
-    padding: 0.25rem;
-    color: $text-color;
+    padding: 0.25rem 0.75rem;
+    color: transparent;
+    text-shadow: 0 0 0 $text-color;
   }
 }

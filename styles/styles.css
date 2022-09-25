@@ -1,5 +1,4 @@
 /*SECTION----------------------------------------> IMPORTS */
-/*SECTION----------------------------------------> MENU */
 .menu {
   position: fixed;
   left: 0;
@@ -48,6 +47,64 @@
 .menu-btn svg {
   fill: #eeeeee;
   padding: 0.25rem;
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  margin: 4rem auto;
+  text-align: center;
+}
+
+.spinner svg {
+  height: 4.5rem;
+  width: 4.5rem;
+  fill: #00adb5;
+  -webkit-animation: rotate 3s infinite linear;
+          animation: rotate 3s infinite linear;
+}
+
+.message,
+.error {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.message svg,
+.error svg {
+  height: 3rem;
+  width: 3rem;
+  fill: #00adb5;
+  -webkit-transform: translateY(-0.3rem);
+          transform: translateY(-0.3rem);
 }
 
 html {
@@ -132,7 +189,7 @@ p {
 }
 
 .bg-gray-light {
-  background-color: rgba(215, 216, 218, 0.75);
+  background-color: rgba(215, 216, 218, 0.25);
 }
 
 .btn {
@@ -280,7 +337,7 @@ p {
 
 .line__label {
   font-weight: 700;
-  color: #00adb5;
+  color: var(--line-color);
 }
 
 .line__heading {
@@ -300,7 +357,7 @@ p {
 }
 
 .stop-card__info {
-  background-color: rgba(238, 238, 238, 0.75);
+  background-color: rgba(238, 238, 238, 0.25);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -341,7 +398,7 @@ p {
 }
 
 .stop-card__line {
-  border-bottom: thin solid rgba(215, 216, 218, 0.75);
+  border-bottom: thin solid rgba(215, 216, 218, 0.25);
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 50px 250px 70px;
@@ -355,7 +412,8 @@ p {
 .stop__search {
   padding: 0.5rem;
   padding-bottom: 1.25rem;
-  background-color: rgba(238, 238, 238, 0.75);
+  color: #444;
+  background-color: rgba(0, 173, 181, 0.25);
 }
 
 .stop__search input {
@@ -364,9 +422,11 @@ p {
   margin-top: 0.5rem;
   width: 100%;
   border-radius: 0.25rem;
-  border: thin solid rgba(215, 216, 218, 0.75);
+  border: thin solid rgba(215, 216, 218, 0.25);
+  height: 2rem;
   font-size: 1rem;
-  padding: 0.25rem;
-  color: #444;
+  padding: 0.25rem 0.75rem;
+  color: transparent;
+  text-shadow: 0 0 0 #444;
 }
 /*# sourceMappingURL=styles.css.map */

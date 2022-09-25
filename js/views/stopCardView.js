@@ -26,7 +26,7 @@ class StopCardView extends View {
       .map(
         bus => `      
     <div class="stop-card__line">
-      <div class="line__label">
+      <div class="line__label" style="--line-color: ${bus.lineColor}">
       ${bus.line}
       </div>
       <div class="line__buses"> 

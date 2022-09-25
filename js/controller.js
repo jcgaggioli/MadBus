@@ -5,27 +5,21 @@ import menuView from './views/menuView.js';
 
 //> https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-arrives
 
-const state = {};
-
-const helloUrl = 'https://openapi.emtmadrid.es/v1/hello/';
-const testUrl = 'https://openapi.emtmadrid.es/';
-
 const controlSearchResult = async function () {
   try {
     //1. Get search query
     const query = searchStopView.getQuery();
     if (!query) return;
-
+    stopCardView.renderSpinner();
     //2. Load search results
     await model.getBusArrivals(query);
 
     //3. Render results
     stopCardView.render(model.state.busArrivals);
-  } catch (error) {}
-};
-
-const message = function () {
-  console.log('Access Token from login: ', model.state.accessToken);
+  } catch (error) {
+    console.error(error);
+    stopCardView.renderError(error.message);
+  }
 };
 
 const main = async function () {
@@ -34,8 +28,6 @@ const main = async function () {
 
   // Add event listeners
   searchStopView.addHandlerSearch(controlSearchResult);
-
-  console.log('Access Token from login: ', model.state.accessToken);
 };
 
 main();

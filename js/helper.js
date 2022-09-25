@@ -23,6 +23,8 @@ export const AJAX = async function (rqstData) {
       );
     renderLogs &&
       console.log(`Response from '${rqstData.description}': `, response);
+    if (response.code === '90')
+      throw new Error('El valor ingresado debe ser un número');
     return response.data[0];
   } catch (error) {
     throw error;

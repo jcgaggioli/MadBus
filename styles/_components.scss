@@ -1,6 +1,6 @@
 @import 'custom';
 
-/*SECTION----------------------------------------> MENU */
+//SECTION----------------------------------------> MENU
 .menu {
   position: fixed;
   left: 0;
@@ -43,4 +43,43 @@
 .menu-btn svg {
   fill: $text-light-color;
   padding: 0.25rem;
+}
+
+//SECTION----------------------------------------> SPINNER
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  margin: 4rem auto;
+  text-align: center;
+  svg {
+    height: 4.5rem;
+    width: 4.5rem;
+    fill: $first-color;
+    animation: rotate 3s infinite linear;
+  }
+}
+
+//SECTION----------------------------------------> ERROR
+.message,
+.error {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  align-items: center;
+  gap: 1rem;
+  display: flex;
+
+  svg {
+    height: 3rem;
+    width: 3rem;
+    fill: $first-color;
+    transform: translateY(-0.3rem);
+  }
 }

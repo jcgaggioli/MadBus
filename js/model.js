@@ -5,7 +5,7 @@ import { PASSKEY } from './helper.js';
 import { AJAX } from './helper.js';
 
 // SECTION - Auxiliary data--------------------------------------------------------------------------------
-const renderLogs = false;
+const renderLogs = true;
 const accessTokenProv = 'd6b8ea66-3744-11ed-8fab-02dc46503f61';
 
 // SECTION - Model State ----------------------------------------------------------------------------------
@@ -35,7 +35,10 @@ export const state = {
 };
 
 //SECTION - Data transformation
-const mergeLines = function (arr) {
+const mergeLines = function (arr, stopInfo) {
+  //TODO - Refactorizar esta funcion, esta fea y complicada
+  console.log('Arrivals: ', arr);
+  console.log('Stop info: ', stopInfo);
   const res = [];
   arr.map(arrive =>
     res.some(
@@ -56,6 +59,11 @@ const mergeLines = function (arr) {
         })
       : res.push({
           line: arrive.line,
+          lineColor:
+            '#' +
+            stopInfo.lines[
+              stopInfo.lines.findIndex(el => el.label === arrive.line) //> Aca puede haber errores si la propiedad es 'label' o 'line' hacen referencia a lo mismo, pero estan escrito diferentes, por ej> '014' y '14'
+            ].color,
           destination: arrive.destination,
           lineArrivals: [
             {
@@ -151,12 +159,21 @@ export const stopRadius = async function (stop, radius) {
 };
 
 export const getBusArrivals = async function (stop) {
-  state.busArrivals.stopQuery = stop;
-  const response = await AJAX(busArrivalsAPI(stop));
-  console.log('response: ', response);
-  state.busArrivals.stopInfo = response.StopInfo[0];
-  state.busArrivals.arrivals = mergeLines(response.Arrive);
-  console.log('state arrivals: ', state.busArrivals.arrivals);
+  try {
+    state.busArrivals.stopQuery = stop;
+    const response = await AJAX(busArrivalsAPI(stop));
+    if (!response.StopInfo[0]) {
+      throw new Error('No se encontró la parada');
+    }
+    state.busArrivals.stopInfo = response.StopInfo[0];
+    state.busArrivals.arrivals = mergeLines(
+      response.Arrive,
+      response.StopInfo[0]
+    );
+    console.log('state arrivals: ', state.busArrivals.arrivals);
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getLineRoute = async function (line) {
