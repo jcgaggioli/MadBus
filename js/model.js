@@ -12,6 +12,7 @@ const accessTokenProv = 'd6b8ea66-3744-11ed-8fab-02dc46503f61';
 export const state = {
   accessToken: '',
   user: {},
+  stopDetails: '',
   busArrivals: {
     stopQuery: '',
     stopInfo: {},
@@ -37,8 +38,6 @@ export const state = {
 //SECTION - Data transformation
 const mergeLines = function (arr, stopInfo) {
   //TODO - Refactorizar esta funcion, esta fea y complicada
-  console.log('Arrivals: ', arr);
-  console.log('Stop info: ', stopInfo);
   const res = [];
   arr.map(arrive =>
     res.some(
@@ -55,7 +54,7 @@ const mergeLines = function (arr, stopInfo) {
           busEta: arrive.estimateArrive,
           busDeviation: arrive.deviation,
           busDistance: arrive.DistanceBus,
-          busCoords: arrive.geometry.coordinates,
+          busCoords: arrive.geometry.coordinates.reverse(),
         })
       : res.push({
           line: arrive.line,
@@ -166,11 +165,13 @@ export const getBusArrivals = async function (stop) {
       throw new Error('No se encontró la parada');
     }
     state.busArrivals.stopInfo = response.StopInfo[0];
+    console.log('Stop info: ', state.busArrivals.stopInfo);
+    const { stops: stopDetail } = await AJAX(stopInfoAPI(stop));
+    [state.stopDetails] = stopDetail;
     state.busArrivals.arrivals = mergeLines(
       response.Arrive,
       response.StopInfo[0]
     );
-    console.log('state arrivals: ', state.busArrivals.arrivals);
   } catch (error) {
     throw error;
   }

@@ -1,6 +1,7 @@
 import View from './Views.js';
 import { capitalizeWords } from '../helper.js';
 
+const renderLogs = false;
 class StopCardView extends View {
   _parentElement = document.querySelector('.stop-card__container');
 
@@ -12,7 +13,7 @@ class StopCardView extends View {
   }
 
   _generateMarkup() {
-    console.log('Data to render: ', this._data);
+    renderLogs && console.log('Data to render: ', this._data);
     const markup = `
     <div class="stop-card__info">
       <div class="stop-card__name">

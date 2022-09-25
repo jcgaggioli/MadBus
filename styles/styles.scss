@@ -116,3 +116,11 @@
     text-shadow: 0 0 0 $text-color;
   }
 }
+
+.icon_bus path {
+  fill: $second-color;
+}
+
+#map {
+  height: 300px;
+}
