@@ -117,8 +117,19 @@
   }
 }
 
-.icon_bus path {
-  fill: $second-color;
+.icon_bus {
+  width: 24px;
+  height: 24px;
+  path {
+    fill: $third-color;
+  }
+}
+.icon_user-location {
+  width: 24px;
+  height: 24px;
+  path {
+    fill: $first-color;
+  }
 }
 
 #map {

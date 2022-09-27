@@ -18,7 +18,7 @@ class StopCardView extends View {
     <div class="stop-card__info">
       <div class="stop-card__name">
         <h2>${this._data.stopInfo.stopName.toUpperCase()}</h2>
-        <h4>${this._data.stopInfo.Direction}</h4>
+        <h4>${this._data.stopInfo.stopAddress}</h4>
       </div>
       <div class="stop-card__stop-number">${this._data.stopInfo.stopId}</div>
       </div>

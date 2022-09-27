@@ -15,16 +15,16 @@ const controlSearchResult = async function () {
     stopCardView.renderSpinner();
     //2. Load search results
     await model.getBusArrivals(query);
+    await model.getStopInfo(1401);
+    await model.getLineInfo(32);
 
     //3. Render results
     stopCardView.render(model.state.busArrivals);
 
     //4. Render map
-    maps.renderView(
-      model.state.busArrivals.stopInfo.geometry.coordinates.reverse(),
-      13
-    ); //TODO - Corregir el orden de las coordenadas en otro lado
-    maps.renderBuses(model.state);
+    maps.renderView(model.state.busArrivals.stopInfo.stopCoords.reverse(), 13); //TODO - Corregir el orden de las coordenadas en otro lado
+    maps.renderBuses(model.state.busArrivals);
+    maps.renderStop(model.state.busArrivals);
   } catch (error) {
     console.error(error);
     stopCardView.renderError(error.message);

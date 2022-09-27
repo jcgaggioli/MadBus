@@ -439,8 +439,22 @@ svg {
   text-shadow: 0 0 0 #444;
 }
 
+.icon_bus {
+  width: 24px;
+  height: 24px;
+}
+
 .icon_bus path {
-  fill: #222831;
+  fill: #ff2e63;
+}
+
+.icon_user-location {
+  width: 24px;
+  height: 24px;
+}
+
+.icon_user-location path {
+  fill: #00adb5;
 }
 
 #map {

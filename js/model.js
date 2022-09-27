@@ -3,9 +3,10 @@ import { APIURL, LOGINURL } from './helper.js';
 import { XCLIENDID } from './helper.js';
 import { PASSKEY } from './helper.js';
 import { AJAX } from './helper.js';
+import { today } from './helper.js';
 
 // SECTION - Auxiliary data--------------------------------------------------------------------------------
-const renderLogs = true;
+const renderLogs = false;
 const accessTokenProv = 'd6b8ea66-3744-11ed-8fab-02dc46503f61';
 
 // SECTION - Model State ----------------------------------------------------------------------------------
@@ -148,13 +149,33 @@ const lineRouteAPI = function (line) {
   return data;
 };
 
+const lineInfoAPI = function (line) {
+  const urlEnd = `lines/${line}/info/${today()}/`;
+  const data = dataAPI('GET', urlEnd, 'Line info');
+  return data;
+};
+
 //SECTION - API Calls ---------------------------------------------------------------------------------------
 export const getStopInfo = async function (stop) {
-  return await AJAX(stopInfoAPI(stop));
+  const response = await AJAX(stopInfoAPI(stop));
+  renderLogs && console.log('Stop info: ', response);
+  return response;
 };
 
 export const stopRadius = async function (stop, radius) {
-  return await AJAX(stopRadiusAPI(stop, radius));
+  const response = await AJAX(stopRadiusAPI(stop, radius));
+  renderLogs && console.log('Stop radius info: ', response);
+  return response;
+};
+
+const createStopObject = function (data) {
+  return {
+    stopId: data.stopId,
+    stopName: data.stopName,
+    stopAddress: data.Direction,
+    stopCoords: data.geometry.coordinates,
+    lines: data.lines,
+  };
 };
 
 export const getBusArrivals = async function (stop) {
@@ -164,10 +185,10 @@ export const getBusArrivals = async function (stop) {
     if (!response.StopInfo[0]) {
       throw new Error('No se encontró la parada');
     }
-    state.busArrivals.stopInfo = response.StopInfo[0];
-    console.log('Stop info: ', state.busArrivals.stopInfo);
-    const { stops: stopDetail } = await AJAX(stopInfoAPI(stop));
-    [state.stopDetails] = stopDetail;
+    const stopInfo = response.StopInfo[0];
+    state.busArrivals.stopInfo = createStopObject(response.StopInfo[0]);
+    renderLogs && console.log('Response bus arrivals:', response);
+    renderLogs && console.log('Arrivals stop info: ', stopInfo);
     state.busArrivals.arrivals = mergeLines(
       response.Arrive,
       response.StopInfo[0]
@@ -179,4 +200,10 @@ export const getBusArrivals = async function (stop) {
 
 export const getLineRoute = async function (line) {
   return await AJAX(lineRouteAPI(line));
+};
+
+export const getLineInfo = async function (line) {
+  const response = await AJAX(lineInfoAPI(line));
+  renderLogs && console.log('Line info: ', response);
+  return response;
 };
