@@ -11,8 +11,15 @@ class StopCardView extends View {
       handler();
     });
   }
+  hideWindow() {
+    this._parentElement.classList.add('hidden');
+  }
+  showWindow() {
+    this._parentElement.classList.remove('hidden');
+  }
 
   _generateMarkup() {
+    //TODO - Separar encabezado de tarjetas en 2 vistas distintas
     renderLogs && console.log('Data to render: ', this._data);
     const markup = `
     <div class="stop-card__info">
@@ -22,6 +29,7 @@ class StopCardView extends View {
       </div>
       <div class="stop-card__stop-number">${this._data.stopInfo.stopId}</div>
       </div>
+      <div class="results-display">
       <div class="stop-card__lines">
     ${this._data.arrivals
       .map(
@@ -30,6 +38,7 @@ class StopCardView extends View {
       <div class="line__label" style="--line-color: ${bus.lineColor}">
       ${bus.line}
       </div>
+
       <div class="line__buses"> 
         <div class="line__etas">${bus.lineArrivals
           .map(
@@ -48,7 +57,12 @@ class StopCardView extends View {
   `
       )
       .join('')}
-    </div>
+      </div>
+      <aside class="options">
+        <div class="btn">ACTUALIZAR MAPA</div>
+        <div class="btn">GUARDAR A FAVORITOS</div>
+        <div class="btn">BUSCAR EN MAPA</div>
+      </aside></div>
     `;
     return markup;
   }

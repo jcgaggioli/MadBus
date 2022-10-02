@@ -1,10 +1,11 @@
-const renderLogs = false;
+const renderLogs = true;
 class Maps {
   #map;
-  #mapZoomLevel = 16;
+  #mapZoomLevel = 15;
   #mapEvent;
   #busesGroup;
   #stopGroup;
+  #stopsGroup;
 
   #busIcon = L.divIcon({
     html: `          
@@ -57,7 +58,10 @@ class Maps {
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
 
-    this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
+    this.#map = L.map('map', { dragging: !L.Browser.mobile }).setView(
+      coords,
+      this.#mapZoomLevel
+    );
 
     L.tileLayer(
       '	https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
@@ -69,42 +73,72 @@ class Maps {
     L.marker(coords, { icon: this.#userLocation }).addTo(this.#map);
     this.#busesGroup = L.layerGroup().addTo(this.#map);
     this.#stopGroup = L.layerGroup().addTo(this.#map);
+    this.#stopsGroup = L.layerGroup().addTo(this.#map);
   }
 
-  renderBuses(data) {
+  renderStopArrivals(data) {
+    this._renderStop(data.busArrivals);
+    this._renderBuses(data.busArrivals);
+  }
+
+  _renderStops(stops) {
+    console.log(stops);
+    this.#stopsGroup.clearLayers();
+    this.#busesGroup.clearLayers();
+    stops.forEach(stop => {
+      L.marker(stop.geometry.coordinates.reverse(), { icon: this.#stopIcon }) //REFACTOR - Ese reverse es horrible. Aparte, se podria hacer que esta funcion llame a renderStop varias veces y que todos los popups sean iguales. Habria que transformar la data que llega aca para pasarsela limpia a la otra funcion
+        .addTo(this.#stopsGroup)
+        .bindPopup(
+          L.popup({
+            maxWidth: 250,
+            minWidth: 100,
+            autoClose: true,
+            closeOnClick: true,
+            className: `<stand-alone-popup>`,
+          })
+        )
+        .setPopupContent(`<p><strong>${stop.stopName.toUpperCase()}</strong></br> ${
+        stop.address
+      }</p>
+
+        <button class="btn stopLook" data-stop="${
+          stop.stopId
+        }">BUSCAR PARADA</button>
+        `);
+    });
+  }
+
+  _renderBuses(data) {
     const buses = data.arrivals;
     renderLogs && console.log('buses: ', buses);
+    this.#stopsGroup.clearLayers();
     this.#busesGroup.clearLayers();
     buses.forEach(element => {
-      element.lineArrivals.forEach(
-        el =>
-          L.marker(el.busCoords, { icon: this.#busIcon })
-            .addTo(this.#busesGroup)
-            .bindPopup(
-              L.popup({
-                maxWidth: 250,
-                minWidth: 100,
-                autoClose: true,
-                closeOnClick: true,
-                className: `stand-alone-popup`,
-              })
-            )
-            .setPopupContent(
-              `<strong> Linea: </strong>${
-                element.line
-              } </br> <strong>Hacia:</strong> ${
-                element.destination
-              }</br> <strong>Bus:</strong> ${
-                el.busNumber
-              } </br> <strong>Llegada:</strong> ${Math.trunc(
-                el.busEta / 60
-              )} min`
-            )
-        // .openPopup()
+      element.lineArrivals.forEach(el =>
+        L.marker(el.busCoords, { icon: this.#busIcon })
+          .addTo(this.#busesGroup)
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoClose: true,
+              closeOnClick: true,
+              className: `stand-alone-popup`,
+            })
+          )
+          .setPopupContent(
+            `<strong> Linea: </strong>${
+              element.line
+            } </br> <strong>Hacia:</strong> ${
+              element.destination
+            }</br> <strong>Bus:</strong> ${
+              el.busNumber
+            } </br> <strong>Llegada:</strong> ${Math.trunc(el.busEta / 60)} min`
+          )
       );
     });
   }
-  renderStop(data) {
+  _renderStop(data) {
     this.#stopGroup.clearLayers();
     L.marker(data.stopInfo.stopCoords, { icon: this.#stopIcon })
       .addTo(this.#stopGroup)
@@ -120,10 +154,15 @@ class Maps {
       .setPopupContent(
         `<strong>${data.stopInfo.stopName}</strong> </br> ${data.stopInfo.stopAddress}</br> N: ${data.stopInfo.stopId} `
       );
+    this.#map.setView(data.stopInfo.stopCoords, 14, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
   }
 
   renderView(coords, zoom = this.#mapZoomLevel) {
-    // const newCoords = coords.reverse();
     this.#map.setView(coords, zoom, {
       animate: true,
       pan: {

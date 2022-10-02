@@ -1,13 +1,13 @@
-export const LOGINURL =
+export const LOGIN_URL =
   'https://openapi.emtmadrid.es/v1/mobilitylabs/user/login/';
-export const APIURL = 'https://openapi.emtmadrid.es/v2/transport/busemtmad/';
-export const XCLIENDID = 'ea33971b-dd47-439b-a1d4-d4118046a843';
+export const API_URL = 'https://openapi.emtmadrid.es/v2/transport/busemtmad/';
+export const X_CLIENT_ID = 'ea33971b-dd47-439b-a1d4-d4118046a843';
 export const PASSKEY =
   '8D4A5A95CAB39544921F42CF51901563B4DCC0C6F51265F19C39BA0A8BECD3850E19DCA7AC871C708BE59F31AD97B382DB74B93041925BA25FA11BF39329CD2B';
 
 const renderLogs = false;
 
-// AJAX call function //TODO - Mejorar esta funcion
+// AJAX call function //REFACTOR - Mejorar esta funcion
 export const AJAX = async function (rqstData) {
   try {
     const data = await fetch(rqstData.url, {
@@ -25,8 +25,9 @@ export const AJAX = async function (rqstData) {
       console.log(`Response from '${rqstData.description}': `, response);
     if (response.code === '90')
       throw new Error('El valor ingresado debe ser un número');
-    return response.data[0];
+    return response.data;
   } catch (error) {
+    console.error(error.message);
     throw error;
   }
 };

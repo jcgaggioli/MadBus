@@ -1,19 +1,23 @@
 // SECTION - Imports --------------------------------------------------------------------------------------
-import { APIURL, LOGINURL } from './helper.js';
-import { XCLIENDID } from './helper.js';
+import { API_URL, LOGIN_URL } from './helper.js';
+import { X_CLIENT_ID } from './helper.js';
 import { PASSKEY } from './helper.js';
 import { AJAX } from './helper.js';
 import { today } from './helper.js';
 
 // SECTION - Auxiliary data--------------------------------------------------------------------------------
-const renderLogs = false;
+const renderLogs = true;
 const accessTokenProv = 'd6b8ea66-3744-11ed-8fab-02dc46503f61';
 
 // SECTION - Model State ----------------------------------------------------------------------------------
 export const state = {
   accessToken: '',
-  user: {},
+  user: {
+    name: 'Juan Cruz',
+    location: '',
+  },
   stopDetails: '',
+  nearStops: '',
   busArrivals: {
     stopQuery: '',
     stopInfo: {},
@@ -36,9 +40,30 @@ export const state = {
   },
 };
 
+export const getUserLocation = function () {
+  //REFACTOR - Esto se podria hacer de otra manera, o colocar en otro lado
+  const success = function (pos) {
+    const { latitude } = pos.coords;
+    const { longitude } = pos.coords;
+    const coords = [latitude, longitude].reverse(); //> Las coordenadas estan invertidas para ver si funciona la api asi
+    state.user.location = coords;
+  };
+  const error = function () {
+    alert('Could not get your position');
+  };
+
+  if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(success, error, {
+      //> usar getCurrentPosition o watchCurrentPosition
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    });
+};
+
 //SECTION - Data transformation
 const mergeLines = function (arr, stopInfo) {
-  //TODO - Refactorizar esta funcion, esta fea y complicada
+  //REFACTOR - Refactorizar esta funcion, esta fea y complicada
   const res = [];
   arr.map(arrive =>
     res.some(
@@ -84,17 +109,20 @@ const mergeLines = function (arr, stopInfo) {
 export const getAccessToken = async function () {
   const loginHeader = {
     headers: {
-      'X-ClientID': XCLIENDID,
+      'X-ClientID': X_CLIENT_ID,
       passKey: PASSKEY,
     },
   };
   renderLogs && console.log('Getting access token...');
-  const data = await fetch(LOGINURL, loginHeader);
-  const res = await data.json();
-  renderLogs && console.log('Response from access token call: ', res);
-  renderLogs && console.log('Access token: ', res.data[0].accessToken);
-  state.accessToken = res.data[0].accessToken;
-  return res.data[0].accessToken;
+  try {
+    const data = await fetch(LOGIN_URL, loginHeader);
+    const res = await data.json();
+    renderLogs && console.log('Access token: ', res.data[0].accessToken);
+    state.accessToken = res.data[0].accessToken;
+  } catch (error) {
+    if (error.message === 'Failed to fetch')
+      throw new Error('Hay problemas de conexion');
+  }
 };
 
 const dataAPI = function (met, urlEnd, desc) {
@@ -109,7 +137,7 @@ const dataAPI = function (met, urlEnd, desc) {
   });
   const fetchData = {
     method: met,
-    url: APIURL + urlEnd,
+    url: API_URL + urlEnd,
     header: {
       accessToken: state.accessToken,
       Accept: 'application/json',
@@ -135,10 +163,17 @@ const stopInfoAPI = function (stop) {
   return data;
 };
 
-// Gets the bus stops in a given radius, in meters
+// Gets the bus stops in a given radius from a stop, in meters
 const stopRadiusAPI = function (stop, radius) {
   const urlEnd = `stops/arroundstop/${stop}/${radius}/`;
-  const data = dataAPI('GET', urlEnd, 'Stops at radius');
+  const data = dataAPI('GET', urlEnd, 'Stops at radius from stop');
+  return data;
+};
+
+// Gets the bus stops in a given radius from coords, in meters
+const stopRadiusCoordsAPI = function (coords, radius) {
+  const urlEnd = `stops/arroundxy/${coords[0]}/${coords[1]}/${radius}/`;
+  const data = dataAPI('GET', urlEnd, 'Stops at radius from coords');
   return data;
 };
 
@@ -157,15 +192,20 @@ const lineInfoAPI = function (line) {
 
 //SECTION - API Calls ---------------------------------------------------------------------------------------
 export const getStopInfo = async function (stop) {
-  const response = await AJAX(stopInfoAPI(stop));
-  renderLogs && console.log('Stop info: ', response);
+  const data = await AJAX(stopInfoAPI(stop));
+  const response = data[0];
   return response;
 };
 
-export const stopRadius = async function (stop, radius) {
+export const stopsRadius = async function (stop, radius) {
   const response = await AJAX(stopRadiusAPI(stop, radius));
-  renderLogs && console.log('Stop radius info: ', response);
   return response;
+};
+export const stopsCoordsRadius = async function (coords, radius) {
+  console.log(coords);
+  const response = await AJAX(stopRadiusCoordsAPI(coords, radius));
+  console.log(response);
+  state.nearStops = response;
 };
 
 const createStopObject = function (data) {
@@ -173,7 +213,7 @@ const createStopObject = function (data) {
     stopId: data.stopId,
     stopName: data.stopName,
     stopAddress: data.Direction,
-    stopCoords: data.geometry.coordinates,
+    stopCoords: data.geometry.coordinates.reverse(),
     lines: data.lines,
   };
 };
@@ -181,14 +221,13 @@ const createStopObject = function (data) {
 export const getBusArrivals = async function (stop) {
   try {
     state.busArrivals.stopQuery = stop;
-    const response = await AJAX(busArrivalsAPI(stop));
+    const data = await AJAX(busArrivalsAPI(stop));
+    const response = data[0];
     if (!response.StopInfo[0]) {
       throw new Error('No se encontró la parada');
     }
     const stopInfo = response.StopInfo[0];
     state.busArrivals.stopInfo = createStopObject(response.StopInfo[0]);
-    renderLogs && console.log('Response bus arrivals:', response);
-    renderLogs && console.log('Arrivals stop info: ', stopInfo);
     state.busArrivals.arrivals = mergeLines(
       response.Arrive,
       response.StopInfo[0]
@@ -204,6 +243,5 @@ export const getLineRoute = async function (line) {
 
 export const getLineInfo = async function (line) {
   const response = await AJAX(lineInfoAPI(line));
-  renderLogs && console.log('Line info: ', response);
   return response;
 };

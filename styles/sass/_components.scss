@@ -1,0 +1,142 @@
+@import 'custom';
+
+//SECTION----------------------------------------> MENU
+.menu {
+  position: fixed;
+  left: 0;
+  top: $header-height;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+  background-color: $second-color;
+  &.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  a {
+    padding: $header-height/6;
+    font-size: $header-height/3;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: $first-color;
+    &:hover {
+      color: $white-color;
+      background-color: $first-color;
+    }
+  }
+}
+.menu-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.menu-btn svg {
+  fill: $text-light-color;
+  padding: 0.25rem;
+}
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+}
+
+//SECTION----------------------------------------> SPINNER
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  margin: 4rem auto;
+  text-align: center;
+  svg {
+    height: 4.5rem;
+    width: 4.5rem;
+    fill: $first-color;
+    animation: rotate 3s infinite linear;
+  }
+}
+
+//SECTION----------------------------------------> ERROR
+.message,
+.error {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  align-items: center;
+  gap: 1rem;
+  display: flex;
+
+  svg {
+    height: 3rem;
+    width: 3rem;
+    fill: $first-color;
+    transform: translateY(-0.3rem);
+  }
+}
+//SECTION----------------------------------------> MAP
+#map {
+  height: 100vh;
+  flex: 1;
+}
+
+//SECTION----------------------------------------> OPTIONS ASIDE
+.options {
+  display: flex;
+  justify-content: space-around;
+  background-color: $first-color;
+  color: white;
+  height: $header-height * 0.75;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+//SECTION----------------------------------------> MEDIA QUERIES
+@media screen and (min-width: 768px) {
+  .menu-btn {
+    display: none;
+  }
+
+  .menu {
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+    flex-direction: row;
+    width: auto;
+    background-color: transparent;
+  }
+  .menu a {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+  .menu a:last-child {
+    padding-right: 0rem;
+  }
+
+  .menu a:hover {
+    background-color: none;
+  }
+
+  .options {
+    background-color: transparent;
+    height: auto;
+    bottom: auto;
+    width: 300px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem 2rem;
+  }
+}

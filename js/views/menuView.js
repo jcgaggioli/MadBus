@@ -11,6 +11,7 @@ class MenuView extends View {
   }
 
   _toggleMenu() {
+    if (window.innerWidth > 768) return;
     this._parentElement.classList.toggle('is-active');
     this._overlay.classList.toggle('hidden');
   }
@@ -18,6 +19,17 @@ class MenuView extends View {
   _addHandlerMenu() {
     this._btnMenu.addEventListener('click', this._toggleMenu.bind(this));
     this._overlay.addEventListener('click', this._toggleMenu.bind(this));
+  }
+
+  addHandlerStop(handler) {
+    this._parentElement.addEventListener(
+      'click',
+      function (e) {
+        const option = e.target.dataset.option;
+        this._toggleMenu();
+        handler(option);
+      }.bind(this)
+    );
   }
 }
 
