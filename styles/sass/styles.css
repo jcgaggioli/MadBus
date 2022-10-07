@@ -90,12 +90,11 @@
   left: 0;
   bottom: 0;
   margin-top: 2rem;
+  width: 100vw;
   display: flex;
   justify-content: space-around;
   background-color: #00adb5;
   color: white;
-  height: 2.25rem;
-  width: 100%;
   z-index: 500;
   gap: 0;
 }
@@ -340,7 +339,7 @@ svg {
 .header {
   background-color: #00adb5;
   color: #eeeeee;
-  position: sticky;
+  position: fixed;
   left: 0;
   top: 0;
   z-index: 9999;

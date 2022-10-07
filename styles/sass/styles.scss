@@ -7,7 +7,7 @@
 .header {
   background-color: $first-color;
   color: $text-light-color;
-  position: sticky;
+  position: fixed;
   left: 0;
   top: 0;
   z-index: 9999;
