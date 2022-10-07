@@ -10,7 +10,7 @@
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 999;
+  z-index: 9999;
   width: 100%;
   height: $header-height;
   padding: 0.25rem 1rem;
@@ -58,6 +58,22 @@
   font-weight: 700;
   color: var(--line-color);
 }
+.login {
+  position: fixed;
+  // display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  background-color: $first-color;
+  color: $white-color;
+  text-align: center;
+  padding-top: 45vh;
+  h1 {
+    font-size: 10vh;
+  }
+}
 
 .results-display {
   display: flex;
@@ -72,7 +88,7 @@
   min-width: 300px;
 }
 
-.stop-card__info {
+.stop-card__result {
   background-color: $gray-alpha-color;
   display: flex;
   justify-content: space-between;
@@ -95,7 +111,7 @@
   align-items: stretch;
 }
 
-.stop-card__lines {
+.stop-card__lines-result {
   display: flex;
   flex-direction: column;
   min-width: 300px;

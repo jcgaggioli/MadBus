@@ -10,7 +10,8 @@ class ArrivalsView extends View {
     const markup = `
     ${this._data.arrivals
       .map(
-        bus => `      
+        bus => `   
+        <div class="stop-card__lines-result">   
     <div class="stop-card__line">
       <div class="line__label" style="--line-color: ${bus.lineColor}">
       ${bus.line}
@@ -28,6 +29,7 @@ class ArrivalsView extends View {
         <div class="line__heading">
         A ${capitalizeWords(bus.destination)}
         </div>
+      </div>
       </div>
       </div>
 

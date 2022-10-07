@@ -85,7 +85,10 @@
   flex: 1;
 }
 
-.options {
+.options-result {
+  position: fixed;
+  left: 0;
+  bottom: 0;
   margin-top: 2rem;
   display: flex;
   justify-content: space-around;
@@ -94,6 +97,14 @@
   height: 2.25rem;
   width: 100%;
   z-index: 500;
+  gap: 0;
+}
+.options-result .btn {
+  width: 100%;
+}
+.options-result .btn:hover {
+  background-color: rgba(13, 16, 19, 0.25);
+  border-radius: 0;
 }
 
 @media screen and (min-width: 768px) {
@@ -118,7 +129,7 @@
   .menu a:hover {
     background-color: none;
   }
-  .options {
+  .options-result {
     background-color: transparent;
     height: auto;
     bottom: auto;
@@ -129,6 +140,10 @@
     justify-content: flex-start;
     gap: 1rem;
     padding: 1rem 2rem;
+  }
+  .options-result .btn:hover {
+    background-color: #ff2e63;
+    border-radius: 3rem;
   }
 }
 html {
@@ -328,7 +343,7 @@ svg {
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 999;
+  z-index: 9999;
   width: 100%;
   height: 3rem;
   padding: 0.25rem 1rem;
@@ -378,6 +393,22 @@ svg {
   color: var(--line-color);
 }
 
+.login {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  background-color: #00adb5;
+  color: #eeeeee;
+  text-align: center;
+  padding-top: 45vh;
+}
+.login h1 {
+  font-size: 10vh;
+}
+
 .results-display {
   display: flex;
   justify-content: space-between;
@@ -391,17 +422,17 @@ svg {
   min-width: 300px;
 }
 
-.stop-card__info {
+.stop-card__result {
   background-color: rgba(215, 216, 218, 0.25);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.25rem 2.5%;
 }
-.stop-card__info h2 {
+.stop-card__result h2 {
   font-size: 1.4rem;
 }
-.stop-card__info h4 {
+.stop-card__result h4 {
   font-size: 1rem;
   font-weight: 400;
 }
@@ -414,7 +445,7 @@ svg {
   align-items: stretch;
 }
 
-.stop-card__lines {
+.stop-card__lines-result {
   display: flex;
   flex-direction: column;
   min-width: 300px;

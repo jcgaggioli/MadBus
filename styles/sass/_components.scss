@@ -89,7 +89,10 @@
 }
 
 //SECTION----------------------------------------> OPTIONS ASIDE
-.options {
+.options-result {
+  position: fixed;
+  left: 0;
+  bottom: 0;
   margin-top: 2rem;
   display: flex;
   justify-content: space-around;
@@ -98,6 +101,14 @@
   height: $header-height * 0.75;
   width: 100%;
   z-index: 500;
+  gap: 0;
+  .btn {
+    width: 100%;
+    &:hover {
+      background-color: $second-alpha-color;
+      border-radius: 0;
+    }
+  }
 }
 
 //SECTION----------------------------------------> MEDIA QUERIES
@@ -126,7 +137,7 @@
     background-color: none;
   }
 
-  .options {
+  .options-result {
     background-color: transparent;
     height: auto;
     bottom: auto;
@@ -137,5 +148,11 @@
     justify-content: flex-start;
     gap: 1rem;
     padding: 1rem 2rem;
+    .btn {
+      &:hover {
+        background-color: $third-color;
+        border-radius: $header-height;
+      }
+    }
   }
 }

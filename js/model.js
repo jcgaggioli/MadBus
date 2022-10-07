@@ -119,6 +119,7 @@ export const getAccessToken = async function () {
     const res = await data.json();
     renderLogs && console.log('Access token: ', res.data[0].accessToken);
     state.accessToken = res.data[0].accessToken;
+    document.querySelector('.login').classList.add('hidden'); //REFACTOR - Sacar esto de aca
   } catch (error) {
     if (error.message === 'Failed to fetch')
       throw new Error('Hay problemas de conexion');

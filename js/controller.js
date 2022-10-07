@@ -20,7 +20,7 @@ const controlSearchResult = async function (stop = '') {
     stopCardView.renderSpinner();
 
     //2. Load search results
-
+    await model.getBusArrivals(query);
     //3. Render results
     renderStopInfo(query);
     renderArrivalsInfo(query);
@@ -35,16 +35,16 @@ const controlSearchResult = async function (stop = '') {
   }
 };
 
-const renderArrivalsInfo = async function (stop) {
+const renderArrivalsInfo = async function () {
   arrivalsView.renderSpinner();
-  await model.getBusArrivals(stop);
+
   asideView.render(model.state.busArrivals);
   arrivalsView.render(model.state.busArrivals);
 };
 
-const renderStopInfo = async function (stop) {
+const renderStopInfo = async function () {
   stopCardView.renderSpinner();
-  await model.getBusArrivals(stop);
+
   stopCardView.render(model.state.busArrivals);
 };
 
