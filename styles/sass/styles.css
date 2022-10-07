@@ -86,15 +86,14 @@
 }
 
 .options {
+  margin-top: 2rem;
   display: flex;
   justify-content: space-around;
   background-color: #00adb5;
   color: white;
   height: 2.25rem;
-  position: fixed;
-  bottom: 0;
   width: 100%;
-  z-index: 999;
+  z-index: 500;
 }
 
 @media screen and (min-width: 768px) {
@@ -418,6 +417,7 @@ svg {
 .stop-card__lines {
   display: flex;
   flex-direction: column;
+  min-width: 300px;
   padding: 0 15px;
   gap: 0.5rem;
   margin-top: 0.5rem;

@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" defer src="js/controller.js"></script>
+    <link rel="icon" href="http://example.com/favicon.png" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css"
@@ -23,7 +24,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <title>test</title>
+    <title>MadBus</title>
   </head>
   <body>
     <!-- //SECTION - HEADER ------------------------------------------->
@@ -38,7 +39,7 @@
         </button>
         <nav class="menu">
           <a href="#parada" data-option="stop">BUSCAR PARADA</a
-          ><a href="#mapa" data-option="map">BUSCAR PARADAS EN EL MAPA</a
+          ><a href="#mapa" data-option="map">BUSCAR EN EL MAPA</a
           ><a href="#favoritos" data-option="map">FAVORITOS</a
           ><a href="#contacto" data-option="contact">CONTACTO</a>
         </nav>
@@ -58,6 +59,11 @@
         <!-- //SECTION - STOP SEARCH RESULTS ------------------------------------>
 
         <div class="stop-card__container">
+          <div class="stop-card__info"></div>
+          <div class="results-display">
+            <div class="stop-card__lines"></div>
+            <div class="options"></div>
+          </div>
           <!-- <div class="stop-card__info">
           <div class="stop-card__name">
             <h2>ESQUERDO GOYA</h2>

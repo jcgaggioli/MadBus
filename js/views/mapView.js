@@ -58,10 +58,10 @@ class Maps {
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
 
-    this.#map = L.map('map', { dragging: !L.Browser.mobile }).setView(
-      coords,
-      this.#mapZoomLevel
-    );
+    this.#map = L.map('map', {
+      dragging: !L.Browser.mobile,
+      gestureHandling: true,
+    }).setView(coords, this.#mapZoomLevel);
 
     L.tileLayer(
       '	https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',

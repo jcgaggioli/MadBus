@@ -4,6 +4,8 @@ import searchStopView from './views/searchStopView.js';
 import menuView from './views/menuView.js';
 import maps from './views/mapView.js';
 import mapView from './views/mapView.js';
+import asideView from './views/asideView.js';
+import arrivalsView from './views/arrivalsView.js';
 
 //> https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-arrives
 
@@ -14,14 +16,16 @@ const controlSearchResult = async function (stop = '') {
     const query = stop || searchStopView.getQuery();
     if (!query) return;
     stopCardView.showWindow();
+
     stopCardView.renderSpinner();
+
     //2. Load search results
-    await model.getBusArrivals(query);
-    await model.getStopInfo(1401);
-    await model.getLineInfo(32);
 
     //3. Render results
-    stopCardView.render(model.state.busArrivals);
+    renderStopInfo(query);
+    renderArrivalsInfo(query);
+
+    // asideView.addUpdateTimeHandler(controlSearchResult);
 
     //4. Render map
     maps.renderStopArrivals(model.state);
@@ -29,6 +33,19 @@ const controlSearchResult = async function (stop = '') {
     console.error(error);
     stopCardView.renderError(error.message);
   }
+};
+
+const renderArrivalsInfo = async function (stop) {
+  arrivalsView.renderSpinner();
+  await model.getBusArrivals(stop);
+  asideView.render(model.state.busArrivals);
+  arrivalsView.render(model.state.busArrivals);
+};
+
+const renderStopInfo = async function (stop) {
+  stopCardView.renderSpinner();
+  await model.getBusArrivals(stop);
+  stopCardView.render(model.state.busArrivals);
 };
 
 const controlMenu = function (option) {
@@ -48,14 +65,13 @@ const controlMenu = function (option) {
 };
 
 const renderStops = async function () {
-  await model.stopsCoordsRadius(model.state.user.location, 500);
+  await model.stopsCoordsRadius(model.state.user.location, 1000);
   mapView._renderStops(model.state.nearStops);
 };
 
 const addListenersPopup = function () {
   //REFACTOR - Esto no deberia estar aca
   const map = document.getElementById('map');
-  console.log(map);
 
   map.addEventListener('click', function (e) {
     console.log(e.target);
@@ -70,6 +86,7 @@ const addListenersPopup = function () {
 
 const addEventHandlers = function () {
   menuView.addHandlerStop(controlMenu);
+  asideView.addUpdateTimeHandler(controlSearchResult);
 };
 
 const main = async function () {

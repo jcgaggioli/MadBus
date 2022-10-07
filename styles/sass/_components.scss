@@ -90,15 +90,14 @@
 
 //SECTION----------------------------------------> OPTIONS ASIDE
 .options {
+  margin-top: 2rem;
   display: flex;
   justify-content: space-around;
   background-color: $first-color;
   color: white;
   height: $header-height * 0.75;
-  position: fixed;
-  bottom: 0;
   width: 100%;
-  z-index: 999;
+  z-index: 500;
 }
 
 //SECTION----------------------------------------> MEDIA QUERIES

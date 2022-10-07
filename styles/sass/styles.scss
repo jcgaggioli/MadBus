@@ -98,6 +98,7 @@
 .stop-card__lines {
   display: flex;
   flex-direction: column;
+  min-width: 300px;
 
   padding: 0 15px;
   gap: 0.5rem;
