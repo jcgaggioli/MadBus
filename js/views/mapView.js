@@ -1,7 +1,7 @@
 const renderLogs = true;
 class Maps {
   #map;
-  #mapZoomLevel = 15;
+  #mapZoomLevel = 16;
   #mapEvent;
   #busesGroup;
   #stopGroup;
@@ -81,8 +81,7 @@ class Maps {
     this._renderBuses(data.busArrivals);
   }
 
-  _renderStops(stops) {
-    console.log(stops);
+  _renderStops(stops, point) {
     this.#stopsGroup.clearLayers();
     this.#busesGroup.clearLayers();
     stops.forEach(stop => {
@@ -106,15 +105,25 @@ class Maps {
         }">BUSCAR PARADA</button>
         `);
     });
+    console.log('user location: ', stops);
+    this.#map.setView(point, this.#mapZoomLevel, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
   }
 
   _renderBuses(data) {
     const buses = data.arrivals;
     renderLogs && console.log('buses: ', buses);
-    this.#stopsGroup.clearLayers();
-    this.#busesGroup.clearLayers();
+    if (this.#stopsGroup) this.#stopsGroup.clearLayers();
+    if (this.#busesGroup) this.#busesGroup.clearLayers();
     buses.forEach(element => {
-      element.lineArrivals.forEach(el =>
+      console.log('element: ', element);
+      element.lineArrivals.forEach(el => {
+        console.log('el: ', el);
+        console.log(this.#busesGroup);
         L.marker(el.busCoords, { icon: this.#busIcon })
           .addTo(this.#busesGroup)
           .bindPopup(
@@ -134,10 +143,11 @@ class Maps {
             }</br> <strong>Bus:</strong> ${
               el.busNumber
             } </br> <strong>Llegada:</strong> ${Math.trunc(el.busEta / 60)} min`
-          )
-      );
+          );
+      });
     });
   }
+
   _renderStop(data) {
     this.#stopGroup.clearLayers();
     L.marker(data.stopInfo.stopCoords, { icon: this.#stopIcon })
@@ -154,7 +164,7 @@ class Maps {
       .setPopupContent(
         `<strong>${data.stopInfo.stopName}</strong> </br> ${data.stopInfo.stopAddress}</br> N: ${data.stopInfo.stopId} `
       );
-    this.#map.setView(data.stopInfo.stopCoords, 14, {
+    this.#map.setView(data.stopInfo.stopCoords, this.#mapZoomLevel, {
       animate: true,
       pan: {
         duration: 1,

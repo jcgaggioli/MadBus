@@ -132,6 +132,7 @@
   color: $text-color;
   background-color: $first-alpha-color;
   height: $header-height * 2;
+  margin-top: $header-height;
 
   input {
     @include box-shadow-1;
@@ -146,6 +147,13 @@
     text-shadow: 0 0 0 $text-color;
   }
 }
+
+@media screen and (min-width: 1024px) {
+  .stop__search {
+    margin-top: 0;
+  }
+}
+
 @media screen and (min-width: 1024px) {
   .overlay {
     display: none;

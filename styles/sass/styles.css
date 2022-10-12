@@ -257,7 +257,7 @@ svg {
 
 .expandable {
   height: 0;
-  transition: all 2s ease-in-out;
+  transition: all 0.25s ease-in-out;
   display: none;
 }
 
@@ -464,6 +464,7 @@ svg {
   color: #444;
   background-color: rgba(0, 173, 181, 0.25);
   height: 6rem;
+  margin-top: 3rem;
 }
 .stop__search input {
   box-shadow: 0.25rem 0.25rem 1rem rgba(0, 0, 0, 0.25);
@@ -478,6 +479,11 @@ svg {
   text-shadow: 0 0 0 #444;
 }
 
+@media screen and (min-width: 1024px) {
+  .stop__search {
+    margin-top: 0;
+  }
+}
 @media screen and (min-width: 1024px) {
   .overlay {
     display: none;

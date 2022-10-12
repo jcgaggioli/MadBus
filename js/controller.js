@@ -16,14 +16,14 @@ const controlSearchResult = async function (stop = '') {
     const query = stop || searchStopView.getQuery();
     if (!query) return;
     stopCardView.showWindow();
-
     stopCardView.renderSpinner();
+    arrivalsView.renderSpinner();
 
     //2. Load search results
     await model.getBusArrivals(query);
     //3. Render results
-    renderStopInfo(query);
-    renderArrivalsInfo(query);
+    renderStopInfo();
+    renderArrivalsInfo();
 
     // asideView.addUpdateTimeHandler(controlSearchResult);
 
@@ -36,15 +36,11 @@ const controlSearchResult = async function (stop = '') {
 };
 
 const renderArrivalsInfo = async function () {
-  arrivalsView.renderSpinner();
-
   asideView.render(model.state.busArrivals);
   arrivalsView.render(model.state.busArrivals);
 };
 
 const renderStopInfo = async function () {
-  stopCardView.renderSpinner();
-
   stopCardView.render(model.state.busArrivals);
 };
 
@@ -66,7 +62,10 @@ const controlMenu = function (option) {
 
 const renderStops = async function () {
   await model.stopsCoordsRadius(model.state.user.location, 1000);
-  mapView._renderStops(model.state.nearStops);
+  mapView._renderStops(
+    model.state.nearStops,
+    model.state.user.location.reverse()
+  ); //> Las coordenadas estan al reves
 };
 
 const addListenersPopup = function () {
@@ -90,9 +89,13 @@ const addEventHandlers = function () {
 };
 
 const main = async function () {
+  console.log('start');
   addEventHandlers();
   model.getUserLocation();
-  console.log('User location: ', model.state.user.location);
+  setTimeout(
+    () => console.log('User location: ', model.state.user.location),
+    5000
+  );
 
   addListenersPopup();
   // Get acces token

@@ -45,7 +45,7 @@ export const getUserLocation = function () {
   const success = function (pos) {
     const { latitude } = pos.coords;
     const { longitude } = pos.coords;
-    const coords = [latitude, longitude].reverse(); //> Las coordenadas estan invertidas para ver si funciona la api asi
+    const coords = [latitude, longitude]; //> Las coordenadas estan invertidas para ver si funciona la api asi
     state.user.location = coords;
   };
   const error = function () {
@@ -53,8 +53,8 @@ export const getUserLocation = function () {
   };
 
   if (navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(success, error, {
-      //> usar getCurrentPosition o watchCurrentPosition
+    navigator.geolocation.watchPosition(success, error, {
+      //> usar getCurrentPosition o watchPosition
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0,
@@ -80,7 +80,7 @@ const mergeLines = function (arr, stopInfo) {
           busEta: arrive.estimateArrive,
           busDeviation: arrive.deviation,
           busDistance: arrive.DistanceBus,
-          busCoords: arrive.geometry.coordinates.reverse(),
+          busCoords: arrive.geometry.coordinates.reverse(), //REFACTOR - Este reverse no deberia estar aca
         })
       : res.push({
           line: arrive.line,
@@ -96,7 +96,7 @@ const mergeLines = function (arr, stopInfo) {
               busEta: arrive.estimateArrive,
               busDeviation: arrive.deviation,
               busDistance: arrive.DistanceBus,
-              busCoords: arrive.geometry.coordinates,
+              busCoords: arrive.geometry.coordinates.reverse(), //REFACTOR - Este reverse no deberia estar aca
             },
           ],
         })
@@ -204,7 +204,7 @@ export const stopsRadius = async function (stop, radius) {
 };
 export const stopsCoordsRadius = async function (coords, radius) {
   console.log(coords);
-  const response = await AJAX(stopRadiusCoordsAPI(coords, radius));
+  const response = await AJAX(stopRadiusCoordsAPI(coords.reverse(), radius)); //> las coordenadas estan al reves
   console.log(response);
   state.nearStops = response;
 };
@@ -233,6 +233,7 @@ export const getBusArrivals = async function (stop) {
       response.Arrive,
       response.StopInfo[0]
     );
+    console.log('acaaa ', response.Arrive);
   } catch (error) {
     throw error;
   }
