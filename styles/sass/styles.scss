@@ -110,7 +110,9 @@
   padding: 0.25rem;
   align-items: stretch;
 }
-
+.stop-card__lines {
+  min-width: 200px;
+}
 .stop-card__lines-result {
   display: flex;
   flex-direction: column;

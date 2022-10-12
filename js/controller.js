@@ -35,7 +35,11 @@ const controlSearchResult = async function (stop = '') {
   }
 };
 
-const renderArrivalsInfo = async function () {
+const renderArrivalsInfo = async function (stop = '') {
+  if (stop) {
+    arrivalsView.renderSpinner();
+    await model.getBusArrivals(stop);
+  }
   asideView.render(model.state.busArrivals);
   arrivalsView.render(model.state.busArrivals);
 };
@@ -73,9 +77,7 @@ const addListenersPopup = function () {
   const map = document.getElementById('map');
 
   map.addEventListener('click', function (e) {
-    console.log(e.target);
     const btn = e.target.closest('.stopLook');
-    console.log(btn);
     if (btn) {
       const stop = btn.dataset.stop;
       controlSearchResult(stop);
@@ -85,11 +87,10 @@ const addListenersPopup = function () {
 
 const addEventHandlers = function () {
   menuView.addHandlerStop(controlMenu);
-  asideView.addUpdateTimeHandler(controlSearchResult);
+  asideView.addUpdateTimeHandler(renderArrivalsInfo);
 };
 
 const main = async function () {
-  console.log('start');
   addEventHandlers();
   model.getUserLocation();
   setTimeout(
