@@ -5,9 +5,7 @@ import { PASSKEY } from './helper.js';
 import { AJAX } from './helper.js';
 import { today } from './helper.js';
 
-// SECTION - Auxiliary data--------------------------------------------------------------------------------
-const renderLogs = true;
-const accessTokenProv = 'd6b8ea66-3744-11ed-8fab-02dc46503f61';
+const renderLogs = false;
 
 // SECTION - Model State ----------------------------------------------------------------------------------
 export const state = {
@@ -41,11 +39,10 @@ export const state = {
 };
 
 export const getUserLocation = function () {
-  //REFACTOR - Esto se podria hacer de otra manera, o colocar en otro lado
   const success = function (pos) {
     const { latitude } = pos.coords;
     const { longitude } = pos.coords;
-    const coords = [latitude, longitude]; //> Las coordenadas estan invertidas para ver si funciona la api asi
+    const coords = [latitude, longitude]; //! Coordinates are in reverse order!!!
     state.user.location = coords;
   };
   const error = function () {
@@ -54,16 +51,16 @@ export const getUserLocation = function () {
 
   if (navigator.geolocation)
     navigator.geolocation.watchPosition(success, error, {
-      //> usar getCurrentPosition o watchPosition
+      //> use getCurrentPosition() or watchPosition()
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0,
     });
 };
 
-//SECTION - Data transformation
+//SECTION - Data transformation ----------------------------------------------------------------------------------
 const mergeLines = function (arr, stopInfo) {
-  //REFACTOR - Refactorizar esta funcion, esta fea y complicada
+  //REFACTOR - This function is too complicated
   const res = [];
   arr.map(arrive =>
     res.some(
@@ -80,14 +77,14 @@ const mergeLines = function (arr, stopInfo) {
           busEta: arrive.estimateArrive,
           busDeviation: arrive.deviation,
           busDistance: arrive.DistanceBus,
-          busCoords: arrive.geometry.coordinates.reverse(), //REFACTOR - Este reverse no deberia estar aca
+          busCoords: arrive.geometry.coordinates.reverse(), //! Coordinates are in reverse order
         })
       : res.push({
           line: arrive.line,
           lineColor:
             '#' +
             stopInfo.lines[
-              stopInfo.lines.findIndex(el => el.label === arrive.line) //> Aca puede haber errores si la propiedad es 'label' o 'line' hacen referencia a lo mismo, pero estan escrito diferentes, por ej> '014' y '14'
+              stopInfo.lines.findIndex(el => el.label === arrive.line) //! This could lead to errors, 'label' and 'line' properties makes reference to the same data, but thery're written different i.e. > '014' and '14'
             ].color,
           destination: arrive.destination,
           lineArrivals: [
@@ -96,7 +93,7 @@ const mergeLines = function (arr, stopInfo) {
               busEta: arrive.estimateArrive,
               busDeviation: arrive.deviation,
               busDistance: arrive.DistanceBus,
-              busCoords: arrive.geometry.coordinates.reverse(), //REFACTOR - Este reverse no deberia estar aca
+              busCoords: arrive.geometry.coordinates.reverse(), //! Coordinates are in reverse order
             },
           ],
         })
@@ -119,7 +116,7 @@ export const getAccessToken = async function () {
     const res = await data.json();
     renderLogs && console.log('Access token: ', res.data[0].accessToken);
     state.accessToken = res.data[0].accessToken;
-    document.querySelector('.login').classList.add('hidden'); //REFACTOR - Sacar esto de aca
+    document.querySelector('.login').classList.add('hidden'); //REFACTOR - DOM control should not be here
   } catch (error) {
     if (error.message === 'Failed to fetch')
       throw new Error('Hay problemas de conexion');
@@ -128,7 +125,7 @@ export const getAccessToken = async function () {
 
 const dataAPI = function (met, urlEnd, desc) {
   const data = JSON.stringify({
-    //TODO - Chequear que hace esta data
+    //TODO - Look what is this data for
     DateTime_Referenced_Incidencies_YYYYMMDD: '20190923',
     Text_EstimationsRequired_YN: 'Y',
     Text_IncidencesRequired_YN: 'Y',
@@ -203,9 +200,7 @@ export const stopsRadius = async function (stop, radius) {
   return response;
 };
 export const stopsCoordsRadius = async function (coords, radius) {
-  console.log(coords);
-  const response = await AJAX(stopRadiusCoordsAPI(coords.reverse(), radius)); //> las coordenadas estan al reves
-  console.log(response);
+  const response = await AJAX(stopRadiusCoordsAPI(coords.reverse(), radius)); //! Coordinates are in reverse order!!!
   state.nearStops = response;
 };
 
@@ -233,7 +228,6 @@ export const getBusArrivals = async function (stop) {
       response.Arrive,
       response.StopInfo[0]
     );
-    console.log('acaaa ', response.Arrive);
   } catch (error) {
     throw error;
   }

@@ -19,7 +19,6 @@ class StopCardView extends View {
   }
 
   _generateMarkup() {
-    //TODO - Separar encabezado de tarjetas en 2 vistas distintas
     renderLogs && console.log('Data to render: ', this._data);
     const markup = `
     <div class="stop-card__result">
@@ -27,9 +26,8 @@ class StopCardView extends View {
         <h2>${this._data.stopInfo.stopName.toUpperCase()}</h2>
         <h4>${this._data.stopInfo.stopAddress}</h4>
       </div>
-      <div class="stop-card__stop-number">${this._data.stopInfo.stopId}</div>
-      </div>
-      </div>
+    <div class="stop-card__stop-number">${this._data.stopInfo.stopId}</div>
+    </div>
   `;
     return markup;
   }

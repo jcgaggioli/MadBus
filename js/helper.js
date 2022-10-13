@@ -7,7 +7,7 @@ export const PASSKEY =
 
 const renderLogs = false;
 
-// AJAX call function //REFACTOR - Mejorar esta funcion
+// AJAX call function
 export const AJAX = async function (rqstData) {
   try {
     const data = await fetch(rqstData.url, {

@@ -7,27 +7,25 @@ import mapView from './views/mapView.js';
 import asideView from './views/asideView.js';
 import arrivalsView from './views/arrivalsView.js';
 
-//> https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-arrives
-
 const controlSearchResult = async function (stop = '') {
-  console.log(this);
   try {
-    //1. Get search query
+    // 1. Get search query
     const query = stop || searchStopView.getQuery();
     if (!query) return;
+
+    // 2. Render spinners and show results window
     stopCardView.showWindow();
     stopCardView.renderSpinner();
     arrivalsView.renderSpinner();
 
-    //2. Load search results
+    // 3. Get results and load search results to state
     await model.getBusArrivals(query);
-    //3. Render results
+
+    // 4. Render results
     renderStopInfo();
     renderArrivalsInfo();
 
-    // asideView.addUpdateTimeHandler(controlSearchResult);
-
-    //4. Render map
+    // 4. Render map
     maps.renderStopArrivals(model.state);
   } catch (error) {
     console.error(error);
@@ -36,10 +34,13 @@ const controlSearchResult = async function (stop = '') {
 };
 
 const renderArrivalsInfo = async function (stop = '') {
+  // 1. If stop is given then render spinner and get new results to update
   if (stop) {
     arrivalsView.renderSpinner();
     await model.getBusArrivals(stop);
   }
+
+  // 2. Render results
   asideView.render(model.state.busArrivals);
   arrivalsView.render(model.state.busArrivals);
 };
@@ -48,8 +49,16 @@ const renderStopInfo = async function () {
   stopCardView.render(model.state.busArrivals);
 };
 
+const renderStops = async function () {
+  await model.stopsCoordsRadius(model.state.user.location, 1000);
+  mapView.renderStops(
+    model.state.nearStops,
+    model.state.user.location.reverse() //! Coordinates are in reverse order!!!
+  );
+};
+
 const controlMenu = function (option) {
-  //REFACTOR - No me gusta como queda esto aca
+  //REFACTOR - This could be somewhere else
   // 1. Render search window and hide other windows
   if (!option) return;
   if (option === 'stop') {
@@ -60,54 +69,28 @@ const controlMenu = function (option) {
     stopCardView.hideWindow();
     renderStops();
   }
-
-  // 2. Clear map
-};
-
-const renderStops = async function () {
-  await model.stopsCoordsRadius(model.state.user.location, 1000);
-  mapView._renderStops(
-    model.state.nearStops,
-    model.state.user.location.reverse()
-  ); //> Las coordenadas estan al reves
-};
-
-const addListenersPopup = function () {
-  //REFACTOR - Esto no deberia estar aca
-  const map = document.getElementById('map');
-
-  map.addEventListener('click', function (e) {
-    const btn = e.target.closest('.stopLook');
-    if (btn) {
-      const stop = btn.dataset.stop;
-      controlSearchResult(stop);
-    }
-  });
 };
 
 const addEventHandlers = function () {
   menuView.addHandlerStop(controlMenu);
   asideView.addUpdateTimeHandler(renderArrivalsInfo);
+  mapView.addHandlerPopup(controlSearchResult);
+  searchStopView.addHandlerSearch(controlSearchResult);
 };
 
 const main = async function () {
-  addEventHandlers();
+  // Get user location
   model.getUserLocation();
-  setTimeout(
-    () => console.log('User location: ', model.state.user.location),
-    5000
-  );
 
-  addListenersPopup();
-  // Get acces token
+  // Get access token
   try {
     await model.getAccessToken();
   } catch (error) {
     stopCardView.renderError(error.message);
   }
-  // Add event listeners
 
-  searchStopView.addHandlerSearch(controlSearchResult);
+  // Add event handlers
+  addEventHandlers();
 };
 
 main();

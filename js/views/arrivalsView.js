@@ -5,8 +5,6 @@ class ArrivalsView extends View {
   _parentElement = document.querySelector('.stop-card__lines');
 
   _generateMarkup() {
-    console.log(this._parentElement);
-    console.log(this._data);
     const markup = `
     ${this._data.arrivals
       .map(

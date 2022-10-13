@@ -6,15 +6,12 @@ class AsideView extends View {
   addUpdateTimeHandler(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.updateTimes');
-      console.log(btn);
       if (!btn) return;
       handler(btn.dataset.stop);
     });
   }
 
   _generateMarkup() {
-    console.log(this._parentElement);
-    console.log(this._data);
     const markup = `
     <div class="options-result">
     <div class="btn updateTimes" data-stop="${this._data.stopInfo.stopId}">ACTUALIZAR TIEMPOS</div>
