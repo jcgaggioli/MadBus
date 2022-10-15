@@ -2,6 +2,8 @@ import View from './Views';
 
 class FavView extends View {
   _parentElement = document.querySelector('.fav__container');
+  _errorMessage = 'No hay paradas favoritas guardadas';
+
   addHandlerViewStop(handler) {
     this._parentElement.addEventListener('click', function (e) {
       e.preventDefault();

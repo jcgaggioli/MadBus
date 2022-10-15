@@ -103,12 +103,12 @@ const controlFav = function (stop) {
 };
 
 const controlDelFav = function (stop) {
-  // 1. Delete stop
-  model.deleteFav(stop);
+    // 1. Delete stop
+    model.deleteFav(stop);
 
-  // 2. Render new stops
-  favView.render(model.state.savedStopsInfo);
-};
+    // 2. Render new stops
+    favView.render(model.state.savedStopsInfo);
+  }
 
 const addEventHandlers = function () {
   menuView.addHandlerStop(controlMenu);
