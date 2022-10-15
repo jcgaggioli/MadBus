@@ -19,6 +19,7 @@ const controlSearchResult = async function (stop = '') {
     stopCardView.showWindow();
     stopCardView.renderSpinner();
     arrivalsView.renderSpinner();
+    favView.hideWindow();
 
     // 3. Get results and load search results to state
     await model.getBusArrivals(query);
@@ -92,6 +93,7 @@ const controlMenu = function (option) {
 };
 
 const showFavs = async function () {
+  favView.renderSpinner();
   await model.getFavStopsInfo();
   favView.render(model.state.savedStopsInfo);
 };
@@ -100,12 +102,22 @@ const controlFav = function (stop) {
   model.addFavStop(stop);
 };
 
+const controlDelFav = function (stop) {
+  // 1. Delete stop
+  model.deleteFav(stop);
+
+  // 2. Render new stops
+  favView.render(model.state.savedStopsInfo);
+};
+
 const addEventHandlers = function () {
   menuView.addHandlerStop(controlMenu);
-  asideView.addUpdateTimeHandler(renderArrivalsInfo);
   mapView.addHandlerPopup(controlSearchResult);
-  searchStopView.addHandlerSearch(controlSearchResult);
+  asideView.addUpdateTimeHandler(renderArrivalsInfo);
   asideView.addHandlerFav(controlFav);
+  searchStopView.addHandlerSearch(controlSearchResult);
+  favView.addHandlerViewStop(controlSearchResult);
+  favView.addHandlerDeleteFav(controlDelFav);
 };
 
 const main = async function () {

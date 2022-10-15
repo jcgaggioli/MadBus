@@ -650,6 +650,7 @@ svg {
 }
 
 .fav__item {
+  justify-content: space-between;
   box-shadow: 0.25rem 0.25rem 1rem rgba(0, 0, 0, 0.25);
   width: 100%;
   padding: 0.25rem;
@@ -657,6 +658,8 @@ svg {
   gap: 2rem;
   background-color: rgba(215, 216, 218, 0.25);
   border-radius: 0.25rem;
+  min-height: 5.25rem;
+  vertical-align: middle;
 }
 .fav__item h4 {
   width: 75px;
@@ -664,9 +667,10 @@ svg {
   align-self: center;
 }
 .fav__item aside {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  justify-content: space-between;
 }
 .fav__item aside p {
   margin: 0;
@@ -674,4 +678,18 @@ svg {
 .fav__item aside .item__lines {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.fav__item:hover {
+  cursor: pointer;
+}
+
+.item__delete {
+  border-radius: 0.25rem;
+  width: 5.25rem;
+  background-color: #ff2e63;
+  text-align: center;
+  color: #eeeeee;
+  font-weight: 800;
+  font-size: 4rem;
 }/*# sourceMappingURL=styles.css.map */

@@ -284,3 +284,22 @@ export const addFavStop = function (stop) {
 const persistFav = function () {
   localStorage.setItem('favStops', JSON.stringify(state.savedStops));
 };
+
+export const deleteFav = function (stop) {
+  const index = state.savedStops.indexOf(stop);
+  console.log(index);
+  if (index > -1) {
+    // only splice array when item is found
+    state.savedStops.splice(index, 1); // 2nd parameter means remove one item only
+  }
+  console.log(stop);
+  const result = state.savedStopsInfo.findIndex(el => {
+    return el.stopId === stop;
+  });
+  if (result > -1) {
+    // only splice array when item is found
+    state.savedStopsInfo.splice(result, 1); // 2nd parameter means remove one item only
+  }
+  // 3. Save to local storage
+  persistFav();
+};
