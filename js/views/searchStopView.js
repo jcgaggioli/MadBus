@@ -14,10 +14,6 @@ class SearchStopView extends View {
     this._parentElement.querySelector('.stop__input').value = '';
   }
 
-  showWindow() {
-    this._parentElement.classList.remove('hidden');
-  }
-
   addHandlerSearch(handler) {
     this._parentElement.addEventListener('submit', function (e) {
       e.preventDefault();

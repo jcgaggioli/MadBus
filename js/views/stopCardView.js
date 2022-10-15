@@ -6,16 +6,10 @@ class StopCardView extends View {
   _parentElement = document.querySelector('.stop-card__info');
 
   addHandlerSearch(handler) {
-    this._parentEl.addEventListener('submit', function (e) {
+    this._parentElement.addEventListener('submit', function (e) {
       e.preventDefault();
       handler();
     });
-  }
-  hideWindow() {
-    this._parentElement.classList.add('hidden');
-  }
-  showWindow() {
-    this._parentElement.classList.remove('hidden');
   }
 
   _generateMarkup() {

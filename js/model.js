@@ -14,6 +14,8 @@ export const state = {
     name: 'Juan Cruz',
     location: '',
   },
+  savedStops: [],
+  savedStopsInfo: [],
   stopDetails: '',
   nearStops: '',
   busArrivals: {
@@ -116,7 +118,6 @@ export const getAccessToken = async function () {
     const res = await data.json();
     renderLogs && console.log('Access token: ', res.data[0].accessToken);
     state.accessToken = res.data[0].accessToken;
-    document.querySelector('.login').classList.add('hidden'); //REFACTOR - DOM control should not be here
   } catch (error) {
     if (error.message === 'Failed to fetch')
       throw new Error('Hay problemas de conexion');
@@ -190,8 +191,10 @@ const lineInfoAPI = function (line) {
 
 //SECTION - API Calls ---------------------------------------------------------------------------------------
 export const getStopInfo = async function (stop) {
+  console.log('staaap: ', stop);
   const data = await AJAX(stopInfoAPI(stop));
   const response = data[0];
+  console.log('response: ', response);
   return response;
 };
 
@@ -240,4 +243,44 @@ export const getLineRoute = async function (line) {
 export const getLineInfo = async function (line) {
   const response = await AJAX(lineInfoAPI(line));
   return response;
+};
+
+//SECTION - Save and load to favourites ----------------------------------------------------------------------------------->
+export const loadFavStops = function () {
+  const storage = localStorage.getItem('favStops');
+  if (storage) state.savedStops = JSON.parse(storage);
+};
+
+export const getFavStopsInfo = async function () {
+  // 1. Get stop data from api
+  const promises = state.savedStops.map(stop => getStopInfo(stop));
+  const data = await Promise.all(promises);
+
+  // 2. Save data to state
+  state.savedStopsInfo = data.map(stop => ({
+    stopId: stop.stops[0].stop,
+    stopName: stop.stops[0].name,
+    address: stop.stops[0].postalAddress,
+    coords: stop.stops[0].geometry.coordinates,
+    lines: stop.stops[0].dataLine,
+  }));
+
+  // 3. Logs
+  console.log(data);
+  console.log(state.savedStopsInfo);
+};
+
+export const addFavStop = function (stop) {
+  // 1. Check if stop already marked
+  if (state.savedStops.includes(stop)) return;
+
+  // 2. Save stop to state
+  state.savedStops.push(stop);
+
+  // 3. Save to local storage
+  persistFav();
+};
+
+const persistFav = function () {
+  localStorage.setItem('favStops', JSON.stringify(state.savedStops));
 };

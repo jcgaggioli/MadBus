@@ -1,6 +1,8 @@
+import View from './Views';
+
 const renderLogs = false;
-class Maps {
-  #parentElement = document.getElementById('map');
+class Maps extends View {
+  _parentElement = document.getElementById('map');
   #map;
   #mapZoomLevel = 16;
 
@@ -36,7 +38,18 @@ class Maps {
   });
 
   constructor() {
+    super();
     this._getPosition();
+  }
+
+  addHandlerPopup(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.stopLook');
+      if (btn) {
+        const stop = btn.dataset.stop;
+        handler(stop);
+      }
+    });
   }
 
   _getPosition() {
@@ -53,6 +66,7 @@ class Maps {
     const { latitude } = position.coords;
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
+    console.log(coords);
 
     this.#map = L.map('map', {
       dragging: !L.Browser.mobile,
@@ -72,9 +86,18 @@ class Maps {
     this.#stopsGroup = L.layerGroup().addTo(this.#map);
   }
 
+  _setView(coords) {
+    this.#map.setView(coords, this.#mapZoomLevel, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
+  }
+
   renderStopArrivals(data) {
-    this._renderStop(data.busArrivals);
-    this._renderBuses(data.busArrivals);
+    this.renderStop(data.busArrivals);
+    this.renderBuses(data.busArrivals);
   }
 
   renderStops(stops, point) {
@@ -102,15 +125,10 @@ class Maps {
         }">BUSCAR PARADA</button>
         `);
     });
-    this.#map.setView(point, this.#mapZoomLevel, {
-      animate: true,
-      pan: {
-        duration: 1,
-      },
-    });
+    this._setView(point);
   }
 
-  _renderBuses(data) {
+  renderBuses(data) {
     const buses = data.arrivals;
     renderLogs && console.log('buses: ', buses);
     if (this.#stopsGroup) this.#stopsGroup.clearLayers();
@@ -141,7 +159,7 @@ class Maps {
     });
   }
 
-  _renderStop(data) {
+  renderStop(data) {
     this.#stopGroup.clearLayers();
     L.marker(data.stopInfo.stopCoords, { icon: this.#stopIcon })
       .addTo(this.#stopGroup)
@@ -157,31 +175,8 @@ class Maps {
       .setPopupContent(
         `<strong>${data.stopInfo.stopName}</strong> </br> ${data.stopInfo.stopAddress}</br> N: ${data.stopInfo.stopId} `
       );
-    this.#map.setView(data.stopInfo.stopCoords, this.#mapZoomLevel, {
-      animate: true,
-      pan: {
-        duration: 1,
-      },
-    });
-  }
 
-  renderView(coords, zoom = this.#mapZoomLevel) {
-    this.#map.setView(coords, zoom, {
-      animate: true,
-      pan: {
-        duration: 1,
-      },
-    });
-  }
-
-  addHandlerPopup(handler) {
-    this.#parentElement.addEventListener('click', function (e) {
-      const btn = e.target.closest('.stopLook');
-      if (btn) {
-        const stop = btn.dataset.stop;
-        handler(stop);
-      }
-    });
+    this._setView(data.stopInfo.stopCoords);
   }
 }
 

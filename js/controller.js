@@ -6,6 +6,8 @@ import maps from './views/mapView.js';
 import mapView from './views/mapView.js';
 import asideView from './views/asideView.js';
 import arrivalsView from './views/arrivalsView.js';
+import loginView from './views/loginView.js';
+import favView from './views/favView.js';
 
 const controlSearchResult = async function (stop = '') {
   try {
@@ -64,11 +66,38 @@ const controlMenu = function (option) {
   if (option === 'stop') {
     searchStopView.showWindow();
     stopCardView.showWindow();
+    mapView.showWindow();
+    favView.hideWindow();
   }
   if (option === 'map') {
-    stopCardView.hideWindow();
+    stopCardView.showWindow();
+    mapView.showWindow();
+    favView.hideWindow();
     renderStops();
   }
+  if (option === 'fav') {
+    // Display/Hide containers
+    searchStopView.hideWindow();
+    stopCardView.hideWindow();
+    mapView.hideWindow();
+    favView.showWindow();
+
+    // Render favorites
+    showFavs();
+  }
+  if (option === 'contact') {
+    // Do something
+    console.log('Apretaste contacto');
+  }
+};
+
+const showFavs = async function () {
+  await model.getFavStopsInfo();
+  favView.render(model.state.savedStopsInfo);
+};
+
+const controlFav = function (stop) {
+  model.addFavStop(stop);
 };
 
 const addEventHandlers = function () {
@@ -76,15 +105,19 @@ const addEventHandlers = function () {
   asideView.addUpdateTimeHandler(renderArrivalsInfo);
   mapView.addHandlerPopup(controlSearchResult);
   searchStopView.addHandlerSearch(controlSearchResult);
+  asideView.addHandlerFav(controlFav);
 };
 
 const main = async function () {
-  // Get user location
+  // Get user location and saved data
   model.getUserLocation();
+  model.loadFavStops();
 
   // Get access token
   try {
     await model.getAccessToken();
+    loginView.hideWindow();
+    model.getFavStopsInfo();
   } catch (error) {
     stopCardView.renderError(error.message);
   }

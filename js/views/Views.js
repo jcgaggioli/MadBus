@@ -1,6 +1,7 @@
 import icons from 'url:../../img/icons.svg';
 
 export default class View {
+  _parentElement;
   _data;
 
   /**
@@ -50,6 +51,12 @@ export default class View {
           curEl.setAttribute(attr.name, attr.value)
         );
     });
+  }
+  showWindow() {
+    this._parentElement.classList.remove('hidden');
+  }
+  hideWindow() {
+    this._parentElement.classList.add('hidden');
   }
 
   _clear() {
