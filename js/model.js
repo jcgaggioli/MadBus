@@ -1,7 +1,7 @@
 // SECTION - Imports --------------------------------------------------------------------------------------
 import { API_URL, LOGIN_URL } from './helper.js';
-import { X_CLIENT_ID } from './helper.js';
-import { PASSKEY } from './helper.js';
+import { X_CLIENT_ID } from './private.js';
+import { PASSKEY } from './private.js';
 import { AJAX } from './helper.js';
 import { today } from './helper.js';
 

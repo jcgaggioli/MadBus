@@ -1,9 +1,7 @@
 export const LOGIN_URL =
   'https://openapi.emtmadrid.es/v1/mobilitylabs/user/login/';
 export const API_URL = 'https://openapi.emtmadrid.es/v2/transport/busemtmad/';
-export const X_CLIENT_ID = 'ea33971b-dd47-439b-a1d4-d4118046a843';
-export const PASSKEY =
-  '8D4A5A95CAB39544921F42CF51901563B4DCC0C6F51265F19C39BA0A8BECD3850E19DCA7AC871C708BE59F31AD97B382DB74B93041925BA25FA11BF39329CD2B';
+
 
 const renderLogs = false;
 
