@@ -66,7 +66,6 @@ class Maps extends View {
     const { latitude } = position.coords;
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
-    console.log(coords);
 
     this.#map = L.map('map', {
       dragging: !L.Browser.mobile,
@@ -130,7 +129,6 @@ class Maps extends View {
 
   renderBuses(data) {
     const buses = data.arrivals;
-    renderLogs && console.log('buses: ', buses);
     if (this.#stopsGroup) this.#stopsGroup.clearLayers();
     if (this.#busesGroup) this.#busesGroup.clearLayers();
     buses.forEach(element => {

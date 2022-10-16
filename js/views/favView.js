@@ -26,7 +26,6 @@ class FavView extends View {
 
   _generateMarkup() {
     const stops = this._data;
-    console.log(stops);
     const markup = `
     <div class="fav__container">
     <div class="fav__results">${stops

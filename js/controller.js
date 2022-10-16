@@ -33,7 +33,6 @@ const controlSearchResult = async function (stop = '') {
     // 4. Render map
     maps.renderStopArrivals(model.state);
   } catch (error) {
-    console.error(error);
     stopCardView.renderError(error.message);
   }
 };
@@ -68,6 +67,7 @@ const controlMenu = function (option) {
   if (!option) return;
   if (option === 'stop') {
     stopCardView.showWindow();
+    searchStopView.showWindow();
     stopsView.showWindow();
     asideView.showWindow();
     arrivalsView.showWindow();
@@ -79,6 +79,7 @@ const controlMenu = function (option) {
     asideView.hideWindow();
     stopsView.showWindow();
     stopCardView.hideWindow();
+    searchStopView.hideWindow();
     favView.hideWindow();
 
     // Render stops
@@ -94,18 +95,20 @@ const controlMenu = function (option) {
   }
   if (option === 'contact') {
     // Do something
-    console.log('Apretaste contacto');
+    // console.log('Apretaste contacto');
   }
 };
 
 const showFavs = async function () {
   favView.renderSpinner();
   await model.getFavStopsInfo();
+  favView.renderMessage('esto es un mensaje');
   favView.render(model.state.savedStopsInfo);
 };
 
 const controlFav = function (stop) {
   model.addFavStop(stop);
+
 };
 
 const controlDelFav = function (stop) {
@@ -127,15 +130,17 @@ const addEventHandlers = function () {
 };
 
 const main = async function () {
-  // Get user location and saved data
-  model.getUserLocation();
-  model.loadFavStops();
-
-  // Get access token
   try {
+    // Get user location and saved data
+    model.getUserLocation();
+    model.loadFavStops();
+
+    // Get access token and fav info
     await model.getAccessToken();
-    loginView.hideWindow();
     model.getFavStopsInfo();
+
+    // Update window
+    loginView.hideWindow();
   } catch (error) {
     stopCardView.renderError(error.message);
   }

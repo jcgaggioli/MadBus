@@ -440,6 +440,7 @@ svg {
   width: 100vw;
   height: 3rem;
   padding: 0.25rem 1rem;
+  padding-right: 2rem;
   font-weight: bold;
   font-size: 2rem;
   display: flex;
@@ -699,4 +700,8 @@ svg {
 }
 .item__delete:hover {
   background-color: #ff2e63;
+}
+
+#parada {
+  scroll-margin-top: 3rem;
 }/*# sourceMappingURL=styles.css.map */

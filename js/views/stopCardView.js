@@ -1,6 +1,5 @@
 import View from './Views.js';
 
-const renderLogs = false;
 class StopCardView extends View {
   _parentElement = document.querySelector('.stop-card__info');
 
@@ -12,7 +11,6 @@ class StopCardView extends View {
   }
 
   _generateMarkup() {
-    renderLogs && console.log('Data to render: ', this._data);
     const markup = `
     <div class="stop-card__result">
       <div class="stop-card__name">

@@ -24,7 +24,7 @@ class AsideView extends View {
     <div class="options-result">
     <div class="btn updateTimes" data-stop="${this._data.stopInfo.stopId}">ACTUALIZAR TIEMPOS</div>
     <div class="btn saveFav" data-stop="${this._data.stopInfo.stopId}">GUARDAR A FAVORITOS</div>
-    <div class="btn mapLook">BUSCAR EN MAPA</div>
+    <!-- <div class="btn mapLook">BUSCAR EN MAPA</div> -->
     </div>
     `;
     return markup;
