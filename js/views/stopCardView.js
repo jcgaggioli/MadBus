@@ -1,5 +1,4 @@
 import View from './Views.js';
-import { capitalizeWords } from '../helper.js';
 
 const renderLogs = false;
 class StopCardView extends View {

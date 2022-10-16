@@ -95,7 +95,7 @@
   justify-content: space-around;
   background-color: #00adb5;
   color: white;
-  z-index: 500;
+  z-index: 1900;
   gap: 0;
 }
 .options-result .btn {
@@ -381,7 +381,7 @@ svg {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
-  z-index: 999;
+  z-index: 9999;
   transition: all 0.5s;
 }
 
@@ -415,7 +415,6 @@ svg {
   color: #222831;
 }
 
-/*SECTION----------------------------------------> MEDIA QUERIES*/
 @media screen and (min-width: 1024px) {
   .full-lg-screen {
     width: 100%;
@@ -638,8 +637,10 @@ svg {
   }
 }
 .fav__container {
+  margin-top: 3rem;
   max-width: 700px;
   padding: 1rem;
+  min-width: 400px;
 }
 
 .fav__results {

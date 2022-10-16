@@ -27,7 +27,9 @@
     <title>MadBus</title>
   </head>
   <body>
-    <!-- //SECTION - HEADER ------------------------------------------->
+    <!-- //SECTION - UTILITIES ------------------------------------------------>
+    <div class="overlay hidden"></div>
+    <!-- //SECTION - LOGIN ---------------------------------------------------->
     <div class="login">
       <h1>MadBus</h1>
       <div class="three-body">
@@ -36,8 +38,9 @@
         <div class="three-body__dot"></div>
       </div>
     </div>
-    <div class="overlay hidden"></div>
+    <!-- //SECTION - APP ------------------------------------------------------>
     <div class="app">
+      <!-- //SECTION - HEADER ------------------------------------------------->
       <header class="header container">
         <a href="index.html" class="logo">MadBus</a>
         <button class="menu-btn">
@@ -52,9 +55,9 @@
           ><a href="#contacto" data-option="contact">CONTACTO</a>
         </nav>
       </header>
-      <!-- //SECTION - STOP SEARCH --------------------------------------------->
+      <!-- //SECTION - STOP --------------------------------------------------->
       <section id="stop" class="container">
-        <!-- //SECTION - STOP SEARCH INPUT ------------------------------------->
+        <!-- //SECTION - STOP SEARCH INPUT ------------------------------------>
         <form class="stop__search expandable" id="parada">
           <h4><strong>Buscar parada</strong></h4>
           <input
@@ -64,54 +67,21 @@
           />
         </form>
 
-        <!-- //SECTION - STOP SEARCH RESULTS ------------------------------------>
-
+        <!-- //SECTION - STOP SEARCH RESULTS --------------------------------->
         <div class="stop-card__container">
           <div class="stop-card__info"></div>
           <div class="results-display">
             <div class="stop-card__lines"></div>
             <div class="options"></div>
           </div>
-          <!-- <div class="stop-card__info">
-          <div class="stop-card__name">
-            <h2>ESQUERDO GOYA</h2>
-            <h4>Doctor esquerdo Goya, 54</h4>
-          </div>
-          <div class="stop-card__stop-number">200</div>
-        </div>
-        <div class="stop-card__lines">
-          <div class="stop-card__line">
-            <div class="line__label">200</div>
-            <div class="line__heading">Al campo</div>
-            <div class="line__min-frq">12</div>
-            <div class="line__max-freq">35</div>
-          </div>
-          <div class="stop-card__line">
-            <div class="line__label">148</div>
-            <div class="line__heading">Al campo</div>
-            <div class="line__min-frq">12</div>
-            <div class="line__max-freq">35</div>
-          </div>
-          <div class="stop-card__line">
-            <div class="line__label">148</div>
-            <div class="line__heading">Al campo</div>
-            <div class="line__min-frq">12</div>
-            <div class="line__max-freq">35</div>
-          </div>
-          <div class="stop-card__line">
-            <div class="line__label">148</div>
-            <div class="line__heading">Al campo</div>
-            <div class="line__min-frq">12</div>
-            <div class="line__max-freq">35</div>
-          </div>
-        </div> -->
         </div>
         <div id="map"></div>
       </section>
-      <!-- //SECTION - FAVOURITES --------------------------------------------->
-      <section id="favoritos" class="container">
+
+      <!-- //SECTION - FAVOURITES -------------------------------------------->
+      <section id="favoritos" class="container hidden">
         <div class="fav__container">
-          <div class="fav__results">
+          <!-- <div class="fav__results">
             <div class="fav__item">
               <h4>6127</h4>
               <aside>
@@ -137,7 +107,7 @@
               </aside>
               <div class="item__delete">X</div>
             </div>
-          </div>
+          </div> -->
         </div>
       </section>
     </div>

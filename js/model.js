@@ -191,10 +191,8 @@ const lineInfoAPI = function (line) {
 
 //SECTION - API Calls ---------------------------------------------------------------------------------------
 export const getStopInfo = async function (stop) {
-  console.log('staaap: ', stop);
   const data = await AJAX(stopInfoAPI(stop));
   const response = data[0];
-  console.log('response: ', response);
   return response;
 };
 
@@ -264,10 +262,6 @@ export const getFavStopsInfo = async function () {
     coords: stop.stops[0].geometry.coordinates,
     lines: stop.stops[0].dataLine,
   }));
-
-  // 3. Logs
-  console.log(data);
-  console.log(state.savedStopsInfo);
 };
 
 export const addFavStop = function (stop) {
@@ -287,19 +281,16 @@ const persistFav = function () {
 
 export const deleteFav = function (stop) {
   const index = state.savedStops.indexOf(stop);
-  console.log(index);
   if (index > -1) {
     // only splice array when item is found
     state.savedStops.splice(index, 1); // 2nd parameter means remove one item only
   }
-  console.log(stop);
   const result = state.savedStopsInfo.findIndex(el => {
     return el.stopId === stop;
   });
   if (result > -1) {
-    // only splice array when item is found
-    state.savedStopsInfo.splice(result, 1); // 2nd parameter means remove one item only
+    state.savedStopsInfo.splice(result, 1);
+    // 3. Save to local storage
+    persistFav();
   }
-  // 3. Save to local storage
-  persistFav();
 };

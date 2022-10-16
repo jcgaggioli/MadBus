@@ -1,7 +1,7 @@
 import View from './Views';
 
 class FavView extends View {
-  _parentElement = document.querySelector('.fav__container');
+  _parentElement = document.getElementById('favoritos');
   _errorMessage = 'No hay paradas favoritas guardadas';
 
   addHandlerViewStop(handler) {
@@ -28,6 +28,7 @@ class FavView extends View {
     const stops = this._data;
     console.log(stops);
     const markup = `
+    <div class="fav__container">
     <div class="fav__results">${stops
       .map(
         stop => `
@@ -50,6 +51,7 @@ class FavView extends View {
     `
       )
       .join('')}
+  </div>
   </div>
     `;
     return markup;

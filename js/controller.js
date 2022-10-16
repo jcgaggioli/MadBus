@@ -8,6 +8,7 @@ import asideView from './views/asideView.js';
 import arrivalsView from './views/arrivalsView.js';
 import loginView from './views/loginView.js';
 import favView from './views/favView.js';
+import stopsView from './views/stopsView.js';
 
 const controlSearchResult = async function (stop = '') {
   try {
@@ -16,7 +17,8 @@ const controlSearchResult = async function (stop = '') {
     if (!query) return;
 
     // 2. Render spinners and show results window
-    stopCardView.showWindow();
+    controlMenu('stop');
+    // stopCardView.showWindow();
     stopCardView.renderSpinner();
     arrivalsView.renderSpinner();
     favView.hideWindow();
@@ -65,22 +67,26 @@ const controlMenu = function (option) {
   // 1. Render search window and hide other windows
   if (!option) return;
   if (option === 'stop') {
-    searchStopView.showWindow();
     stopCardView.showWindow();
-    mapView.showWindow();
+    stopsView.showWindow();
+    asideView.showWindow();
+    arrivalsView.showWindow();
     favView.hideWindow();
   }
   if (option === 'map') {
-    stopCardView.showWindow();
-    mapView.showWindow();
+    // Display/Hide containers
+    arrivalsView.hideWindow();
+    asideView.hideWindow();
+    stopsView.showWindow();
+    stopCardView.hideWindow();
     favView.hideWindow();
+
+    // Render stops
     renderStops();
   }
   if (option === 'fav') {
     // Display/Hide containers
-    searchStopView.hideWindow();
-    stopCardView.hideWindow();
-    mapView.hideWindow();
+    stopsView.hideWindow();
     favView.showWindow();
 
     // Render favorites
@@ -103,12 +109,12 @@ const controlFav = function (stop) {
 };
 
 const controlDelFav = function (stop) {
-    // 1. Delete stop
-    model.deleteFav(stop);
+  // 1. Delete stop
+  model.deleteFav(stop);
 
-    // 2. Render new stops
-    favView.render(model.state.savedStopsInfo);
-  }
+  // 2. Render new stops
+  favView.render(model.state.savedStopsInfo);
+};
 
 const addEventHandlers = function () {
   menuView.addHandlerStop(controlMenu);

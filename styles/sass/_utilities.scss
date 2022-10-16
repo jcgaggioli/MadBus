@@ -66,7 +66,7 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
-  z-index: 999;
+  z-index: 9999;
   transition: all 0.5s;
 }
 
@@ -100,7 +100,7 @@
   color: $title-color;
 }
 
-/*SECTION----------------------------------------> MEDIA QUERIES*/
+//SECTION----------------------------------------> MEDIA QUERIES
 @media screen and (min-width: 1024px) {
   .full-lg-screen {
     width: 100%;
